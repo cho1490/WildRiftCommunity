@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "721021639732",
+    "firebase_url": "https://wildriftcommunity-cec2f.firebaseio.com",
+    "project_id": "wildriftcommunity-cec2f",
+    "storage_bucket": "wildriftcommunity-cec2f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:721021639732:android:ffaf6c4d01ad42be2b3e61",
+        "android_client_info": {
+          "package_name": "com.example.wildriftcommunity"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "721021639732-2ipbto13qol76qo938hjm7ko112nej3k.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD_XZD5SRutNbj0DtzzdoT6uKFGiyyoBcQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "721021639732-2ipbto13qol76qo938hjm7ko112nej3k.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
