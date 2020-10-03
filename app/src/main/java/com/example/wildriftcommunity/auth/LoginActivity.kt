@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.example.wildriftcommunity.ProgressListener
 import com.example.wildriftcommunity.R
@@ -29,6 +30,16 @@ class LoginActivity() : AppCompatActivity(), ProgressListener, KodeinAware {
         binding = DataBindingUtil.setContentView(this,R.layout.activity_login)
         binding.authViewModel = viewModel
         viewModel.progressListener = this
+
+        viewModel.startLogin.observe(this, Observer {
+            if (it == true) {
+                viewModel.setLoginValues(
+                    binding.email.text.toString(),
+                    binding.password.text.toString()
+                )
+            }
+        })
+
     }
 
     override fun onStarted() {

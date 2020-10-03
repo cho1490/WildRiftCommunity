@@ -15,6 +15,10 @@ class AuthViewModel(private val authRepository : AuthRepository) : ViewModel() {
     var progressListener : ProgressListener? = null
     private val disposables = CompositeDisposable()
 
+    val user by lazy {
+        authRepository.currentUser()
+    }
+
     private var _email = MutableLiveData<String>()
     val email: LiveData<String>
         get() = _email
@@ -23,15 +27,41 @@ class AuthViewModel(private val authRepository : AuthRepository) : ViewModel() {
     val password: LiveData<String>
         get() = _password
 
+    private var _startLogin = MutableLiveData<Boolean>()
+    val startLogin: LiveData<Boolean>
+        get() = _startLogin
+
+    private var _startSignUp = MutableLiveData<Boolean>()
+    val startSignUp: LiveData<Boolean>
+        get() = _startSignUp
 
     fun login() {
-        if (email.value.isNullOrEmpty() || password.value.isNullOrEmpty()) {
-            progressListener?.onFailure("Invalid email or password")
-            return
-        }
+        _startLogin.value = true
 
         progressListener?.onStarted()
         val disposable = authRepository.login(email.value!!, password.value!!)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe({
+                progressListener?.onSuccess()
+            }, {
+                progressListener?.onFailure(it.message!!)
+            })
+        disposables.add(disposable)
+
+        _startSignUp.value = true
+    }
+
+    fun setLoginValues(email: String, password: String) {
+        _email.value = email
+        _password.value = password
+    }
+
+    fun register() {
+        _startSignUp.value = false
+        progressListener?.onStarted()
+        val disposable = authRepository.register(email.value!!, password.value!!)
+            .andThen(authRepository.login(email.value!!, password.value!!))
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({

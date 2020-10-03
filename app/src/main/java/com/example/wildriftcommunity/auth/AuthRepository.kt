@@ -7,6 +7,8 @@ class AuthRepository() {
 
     private val firebase = FirebaseAuth.getInstance()
 
+    fun currentUser() = firebase.currentUser
+
     fun login(email: String, password: String) =
         Completable.create { emitter ->
             firebase.signInWithEmailAndPassword(email, password).addOnCompleteListener {
