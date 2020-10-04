@@ -19,6 +19,7 @@ class AuthViewModel(private val authRepository : AuthRepository) : ViewModel() {
         authRepository.currentUser()
     }
 
+    //LoginActivity
     private var _email = MutableLiveData<String>()
     val email: LiveData<String>
         get() = _email
@@ -30,10 +31,6 @@ class AuthViewModel(private val authRepository : AuthRepository) : ViewModel() {
     private var _startLogin = MutableLiveData<Boolean>()
     val startLogin: LiveData<Boolean>
         get() = _startLogin
-
-    private var _startSignUp = MutableLiveData<Boolean>()
-    val startSignUp: LiveData<Boolean>
-        get() = _startSignUp
 
     fun login() {
         _startLogin.value = true
@@ -57,6 +54,17 @@ class AuthViewModel(private val authRepository : AuthRepository) : ViewModel() {
         _password.value = password
     }
 
+    fun goToSignUp(view : View) {
+        Intent(view.context, SignUpActivity::class.java).also {
+            view.context.startActivity(it)
+        }
+    }
+
+    //SignUpActivity
+    private var _startSignUp = MutableLiveData<Boolean>()
+    val startSignUp: LiveData<Boolean>
+        get() = _startSignUp
+
     fun register() {
         _startSignUp.value = false
         progressListener?.onStarted()
@@ -72,11 +80,7 @@ class AuthViewModel(private val authRepository : AuthRepository) : ViewModel() {
         disposables.add(disposable)
     }
 
-    fun goToSignUp(view : View) {
-        Intent(view.context, SignUpActivity::class.java).also {
-            view.context.startActivity(it)
-        }
-    }
+
 
     override fun onCleared() {
         super.onCleared()
