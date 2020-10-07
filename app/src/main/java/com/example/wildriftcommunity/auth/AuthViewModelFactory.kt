@@ -9,4 +9,5 @@ class AuthViewModelFactory(private val authRepository: AuthRepository) : ViewMod
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
         return AuthViewModel(authRepository) as T
     }
+
 }

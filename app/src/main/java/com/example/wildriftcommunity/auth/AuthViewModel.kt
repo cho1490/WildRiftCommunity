@@ -15,10 +15,6 @@ class AuthViewModel(private val authRepository : AuthRepository) : ViewModel() {
     var progressListener : ProgressListener? = null
     private val disposables = CompositeDisposable()
 
-    val user by lazy {
-        authRepository.currentUser()
-    }
-
     //LoginActivity
     private var _email = MutableLiveData<String>()
     val email: LiveData<String>

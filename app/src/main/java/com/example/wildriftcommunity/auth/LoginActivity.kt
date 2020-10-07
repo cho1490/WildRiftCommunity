@@ -27,9 +27,10 @@ class LoginActivity() : AppCompatActivity(), ProgressListener, KodeinAware {
         super.onCreate(savedInstanceState)
 
         viewModel = ViewModelProvider(this, factory).get(AuthViewModel::class.java)
+        viewModel.progressListener = this
+
         binding = DataBindingUtil.setContentView(this,R.layout.activity_login)
         binding.authViewModel = viewModel
-        viewModel.progressListener = this
 
         viewModel.startLogin.observe(this, Observer {
             if (it == true) {
