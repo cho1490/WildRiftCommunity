@@ -9,6 +9,7 @@ import com.example.wildriftcommunity.ProgressListener
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
+import com.example.wildriftcommunity.util.startLoginActivity
 
 class AuthViewModel(private val authRepository : AuthRepository) : ViewModel() {
 
@@ -75,8 +76,6 @@ class AuthViewModel(private val authRepository : AuthRepository) : ViewModel() {
             })
         disposables.add(disposable)
     }
-
-
 
     override fun onCleared() {
         super.onCleared()

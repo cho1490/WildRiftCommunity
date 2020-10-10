@@ -3,6 +3,7 @@ package com.example.wildriftcommunity
 import android.app.Application
 import com.example.wildriftcommunity.auth.AuthRepository
 import com.example.wildriftcommunity.auth.AuthViewModelFactory
+import com.example.wildriftcommunity.main.MainViewModelFactory
 import org.kodein.di.Kodein
 import org.kodein.di.KodeinAware
 import org.kodein.di.android.x.androidXModule
@@ -27,6 +28,8 @@ class WildRiftCommunityApplication : Application(), KodeinAware {
 
         bind() from singleton { AuthRepository() }
         bind() from provider { AuthViewModelFactory( instance()) }
+
+        bind() from provider { MainViewModelFactory() }
 
     }
 
