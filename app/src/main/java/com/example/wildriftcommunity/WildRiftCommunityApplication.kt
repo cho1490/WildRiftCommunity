@@ -13,15 +13,6 @@ import org.kodein.di.generic.singleton
 
 class WildRiftCommunityApplication : Application(), KodeinAware {
 
-    companion object {
-        lateinit var instance: WildRiftCommunityApplication private set
-    }
-
-    override fun onCreate() {
-        super.onCreate()
-        instance = this
-    }
-
     override val kodein = Kodein.lazy {
         import(androidXModule(this@WildRiftCommunityApplication))
 

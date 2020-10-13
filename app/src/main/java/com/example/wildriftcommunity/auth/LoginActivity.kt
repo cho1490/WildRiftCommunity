@@ -28,6 +28,7 @@ class LoginActivity() : AppCompatActivity(), ProgressListener, KodeinAware {
 
         viewModel = ViewModelProvider(this, factory).get(AuthViewModel::class.java)
         viewModel.progressListener = this
+        binding.lifecycleOwner = this
 
         binding = DataBindingUtil.setContentView(this,R.layout.activity_login)
         binding.authViewModel = viewModel

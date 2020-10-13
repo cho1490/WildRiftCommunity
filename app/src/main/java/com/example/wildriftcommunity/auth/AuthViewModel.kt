@@ -16,19 +16,32 @@ class AuthViewModel(private val authRepository : AuthRepository) : ViewModel() {
     var progressListener : ProgressListener? = null
     private val disposables = CompositeDisposable()
 
-    //LoginActivity
+
     private var _email = MutableLiveData<String>()
-    val email: LiveData<String>
+    val email : LiveData<String>
         get() = _email
 
     private var _password = MutableLiveData<String>()
-    val password: LiveData<String>
+    val password : LiveData<String>
         get() = _password
 
+    private var _passwordCheck = MutableLiveData<String>()
+    val passwordCheck : LiveData<String>
+        get() = _passwordCheck
+
+    private var _nickname = MutableLiveData<Boolean>()
+    val nickname : LiveData<Boolean>
+        get() = _nickname
+
     private var _startLogin = MutableLiveData<Boolean>()
-    val startLogin: LiveData<Boolean>
+    val startLogin : LiveData<Boolean>
         get() = _startLogin
 
+    private var _startSignUp = MutableLiveData<Boolean>()
+    val startSignUp : LiveData<Boolean>
+        get() = _startSignUp
+
+    //LoginActivity
     fun login() {
         _startLogin.value = true
 
@@ -58,9 +71,7 @@ class AuthViewModel(private val authRepository : AuthRepository) : ViewModel() {
     }
 
     //SignUpActivity
-    private var _startSignUp = MutableLiveData<Boolean>()
-    val startSignUp: LiveData<Boolean>
-        get() = _startSignUp
+
 
     fun register() {
         _startSignUp.value = false
