@@ -6,10 +6,10 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.wildriftcommunity.ProgressListener
+import com.google.firebase.firestore.FirebaseFirestore
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
-import com.example.wildriftcommunity.util.startLoginActivity
 
 class AuthViewModel(private val authRepository : AuthRepository) : ViewModel() {
 
@@ -29,8 +29,8 @@ class AuthViewModel(private val authRepository : AuthRepository) : ViewModel() {
     val passwordCheck : LiveData<String>
         get() = _passwordCheck
 
-    private var _nickname = MutableLiveData<Boolean>()
-    val nickname : LiveData<Boolean>
+    private var _nickname = MutableLiveData<String>()
+    val nickname : LiveData<String>
         get() = _nickname
 
     private var _startLogin = MutableLiveData<Boolean>()
@@ -41,22 +41,26 @@ class AuthViewModel(private val authRepository : AuthRepository) : ViewModel() {
     val startSignUp : LiveData<Boolean>
         get() = _startSignUp
 
+    private var _checkLogin = MutableLiveData<Boolean>()
+    val checkLogin : LiveData<Boolean>
+        get() = _checkLogin
+
     //LoginActivity
     fun login() {
         _startLogin.value = true
-
         progressListener?.onStarted()
+
         val disposable = authRepository.login(email.value!!, password.value!!)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({
-                progressListener?.onSuccess()
+                progressListener?.onSuccess("로그인 성공!")
             }, {
                 progressListener?.onFailure(it.message!!)
             })
         disposables.add(disposable)
 
-        _startSignUp.value = true
+        _startLogin.value = false
     }
 
     fun setLoginValues(email: String, password: String) {
@@ -74,18 +78,42 @@ class AuthViewModel(private val authRepository : AuthRepository) : ViewModel() {
 
 
     fun register() {
-        _startSignUp.value = false
+        _startSignUp.value = true
         progressListener?.onStarted()
-        val disposable = authRepository.register(email.value!!, password.value!!)
-            .andThen(authRepository.login(email.value!!, password.value!!))
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe({
-                progressListener?.onSuccess()
-            }, {
-                progressListener?.onFailure(it.message!!)
-            })
-        disposables.add(disposable)
+
+        if(_checkLogin.value!!) {
+            _checkLogin.value = false
+            progressListener?.onStarted()
+            val disposable = authRepository.register(email.value!!, password.value!!)
+                .andThen(authRepository.login(email.value!!, password.value!!))
+                .andThen(authRepository.saveUserDetails(email.value!!, nickname.value!!))
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({
+                    progressListener?.onSuccess("가입 성공!")
+                }, {
+                    progressListener?.onFailure(it.message!!)
+                })
+            disposables.add(disposable)
+        }else{
+            progressListener?.onFailure("닉네임 중복 체크 필수!")
+        }
+
+        _startSignUp.value = false
+    }
+
+    fun setRegisterValue(email: String, password: String, passwordCheck: String, nickname: String){
+        _email.value = email
+        _password.value = password
+        _passwordCheck.value = passwordCheck
+        _nickname.value = nickname
+    }
+
+    fun checkNickname() {
+        progressListener?.onStarted()
+
+
+        _checkLogin.value = true
     }
 
     override fun onCleared() {

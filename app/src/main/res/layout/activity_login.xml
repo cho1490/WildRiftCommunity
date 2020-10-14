@@ -32,7 +32,6 @@
                 android:layout_marginStart="20dp"
                 android:layout_marginEnd="20dp"
                 android:singleLine="true"
-                android:text="@{authViewModel.email}"
                 android:layout_marginBottom="10dp"
                 android:inputType="textEmailAddress"/>
 
@@ -49,7 +48,6 @@
                 android:layout_marginStart="20dp"
                 android:layout_marginEnd="20dp"
                 android:singleLine="true"
-                android:text="@{authViewModel.password}"
                 android:inputType="textPassword"/>
 
             <TextView

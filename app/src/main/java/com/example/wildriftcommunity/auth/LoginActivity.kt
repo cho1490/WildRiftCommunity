@@ -28,10 +28,10 @@ class LoginActivity() : AppCompatActivity(), ProgressListener, KodeinAware {
 
         viewModel = ViewModelProvider(this, factory).get(AuthViewModel::class.java)
         viewModel.progressListener = this
-        binding.lifecycleOwner = this
 
-        binding = DataBindingUtil.setContentView(this,R.layout.activity_login)
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_login)
         binding.authViewModel = viewModel
+        binding.lifecycleOwner = this
 
         viewModel.startLogin.observe(this, Observer {
             if (it == true) {
@@ -48,8 +48,9 @@ class LoginActivity() : AppCompatActivity(), ProgressListener, KodeinAware {
         progressbar.visibility = View.VISIBLE
     }
 
-    override fun onSuccess() {
+    override fun onSuccess(message: String) {
         progressbar.visibility = View.GONE
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
         startHomeActivity()
     }
 
