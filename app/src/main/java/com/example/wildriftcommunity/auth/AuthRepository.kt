@@ -3,6 +3,7 @@ package com.example.wildriftcommunity.auth
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import io.reactivex.Completable
+import java.lang.Exception
 
 class AuthRepository() {
 
@@ -53,8 +54,13 @@ class AuthRepository() {
     
     fun checkNickname(nickname: String) =
         Completable.create{ emitter ->
-            val usersRef = firebaseFirestore.collection("users")
-            usersRef.
+            val usersRef = firebaseFirestore.collection("userNames")
+            if(usersRef.document(nickname).get() != null)
+
+
+
+            usersRef.document(nickname).get().addOnCompleteListener { document ->
+                emitter.onError(document.exception!!)
+            }
         }
-    
 }
