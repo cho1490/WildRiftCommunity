@@ -9,7 +9,7 @@ class AuthRepository() {
 
     private val firebaseAuth = FirebaseAuth.getInstance()
     private val firebaseFirestore = FirebaseFirestore.getInstance()
-    
+
     fun currentUser() = firebaseAuth.currentUser
 
     fun login(email: String, password: String) =
@@ -38,29 +38,42 @@ class AuthRepository() {
 
     fun saveUserDetails(email: String, nickname: String) =
         Completable.create { emitter ->
+
             val user = User(email, nickname)
             val usersRef = firebaseFirestore.collection("users")
             usersRef.document(currentUser()!!.uid)
                 .set(user)
                 .addOnCompleteListener {
                     if (!emitter.isDisposed) {
-                        if (it.isSuccessful) {
-                            emitter.onComplete()
-                        } else
+                        if (!it.isSuccessful) {
                             emitter.onError(it.exception!!)
+                        }
                     }
                 }
+
+            val userName = UserName(currentUser()!!.uid)
+            val userNamesRef = firebaseFirestore.collection("userNames")
+            userNamesRef.document(nickname)
+                .set(userName)
+                .addOnCompleteListener {
+                    if (!emitter.isDisposed) {
+                        if (!it.isSuccessful) {
+                            emitter.onError(it.exception!!)
+                        }
+                    }
+                }
+
+            emitter.onComplete()
         }
-    
+
     fun checkNickname(nickname: String) =
-        Completable.create{ emitter ->
-            val usersRef = firebaseFirestore.collection("userNames")
-            if(usersRef.document(nickname).get() != null)
+        Completable.create { emitter ->
+            val usersRef = firebaseFirestore.collection("users")
 
-
-
-            usersRef.document(nickname).get().addOnCompleteListener { document ->
-                emitter.onError(document.exception!!)
+            usersRef.whereEqualTo("nickname", nickname).get().addOnCompleteListener {
+                emitter.onComplete()
+            }.addOnFailureListener { exception ->
+                emitter.onError(exception)
             }
         }
 }

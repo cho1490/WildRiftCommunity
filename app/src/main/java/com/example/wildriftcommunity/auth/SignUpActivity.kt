@@ -37,10 +37,15 @@ class SignUpActivity : AppCompatActivity(), ProgressListener, KodeinAware {
             if (it == true) {
                 viewModel.setRegisterValue(
                     binding.email.text.toString(),
-                    binding.password.text.toString(),
-                    binding.passwordCheck.text.toString(),
-                    binding.nickname.text.toString()
+                    binding.password.text.toString()
+
                 )
+            }
+        })
+
+        viewModel.checkNickname.observe(this, Observer {
+            if (it == true) {
+
             }
         })
 
