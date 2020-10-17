@@ -1,7 +1,11 @@
 package com.example.wildriftcommunity.auth
 
+import android.app.Application
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.View
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
@@ -43,9 +47,23 @@ class SignUpActivity : AppCompatActivity(), ProgressListener, KodeinAware {
             }
         })
 
-        viewModel.checkNickname.observe(this, Observer {
-            if (it == true) {
+        binding.passwordCheck.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(p0: Editable?) {}
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
 
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                if(binding.password.text.toString() == binding.passwordCheck.text.toString()){
+                    binding.passwordCheckText.text = "비밀번호 일치!"
+                }else{
+                    binding.passwordCheckText.text = "비밀번호 불일치!"
+                }
+            }
+
+        })
+
+        viewModel.startSignUpInfo.observe(this, Observer {
+            if (it == true) {
+                startActivity(Intent(this, SignUpInfoActivity::class.java))
             }
         })
 

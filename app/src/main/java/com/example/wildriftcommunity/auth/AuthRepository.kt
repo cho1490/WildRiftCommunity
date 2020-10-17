@@ -36,25 +36,30 @@ class AuthRepository() {
             }
         }
 
-    fun saveUserDetails(email: String, nickname: String) =
+    fun saveUser(email: String) =
         Completable.create { emitter ->
 
-            val user = User(email, nickname)
+            val user = User(email)
             val usersRef = firebaseFirestore.collection("users")
             usersRef.document(currentUser()!!.uid)
                 .set(user)
                 .addOnCompleteListener {
                     if (!emitter.isDisposed) {
-                        if (!it.isSuccessful) {
+                        if (it.isSuccessful) {
+                            emitter.onComplete()
+                        } else
                             emitter.onError(it.exception!!)
-                        }
                     }
                 }
+        }
 
-            val userName = UserName(currentUser()!!.uid)
-            val userNamesRef = firebaseFirestore.collection("userNames")
-            userNamesRef.document(nickname)
-                .set(userName)
+    fun saveUserDetail(nickname: String) =
+        Completable.create { emitter ->
+
+            val user = UserName(nickname)
+            val usersRef = firebaseFirestore.collection("userNames")
+            usersRef.document(currentUser()!!.uid)
+                .set(user)
                 .addOnCompleteListener {
                     if (!emitter.isDisposed) {
                         if (!it.isSuccessful) {
@@ -68,12 +73,7 @@ class AuthRepository() {
 
     fun checkNickname(nickname: String) =
         Completable.create { emitter ->
-            val usersRef = firebaseFirestore.collection("users")
 
-            usersRef.whereEqualTo("nickname", nickname).get().addOnCompleteListener {
-                emitter.onComplete()
-            }.addOnFailureListener { exception ->
-                emitter.onError(exception)
-            }
         }
+
 }
