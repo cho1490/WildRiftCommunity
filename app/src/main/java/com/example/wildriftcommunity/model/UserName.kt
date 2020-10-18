@@ -1,4 +1,4 @@
-package com.example.wildriftcommunity.auth
+package com.example.wildriftcommunity.model
 
 data class UserName(
     val uid : String

@@ -2,6 +2,7 @@ package com.example.wildriftcommunity.auth
 
 import android.app.Application
 import android.content.Intent
+import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Editable
@@ -15,6 +16,7 @@ import com.example.wildriftcommunity.ProgressListener
 import com.example.wildriftcommunity.R
 import com.example.wildriftcommunity.databinding.ActivityLoginBinding
 import com.example.wildriftcommunity.databinding.ActivitySignUpBinding
+import com.example.wildriftcommunity.main.MainActivity
 import kotlinx.android.synthetic.main.activity_login.*
 import org.kodein.di.KodeinAware
 import org.kodein.di.android.kodein
@@ -37,6 +39,21 @@ class SignUpActivity : AppCompatActivity(), ProgressListener, KodeinAware {
         binding.authViewModel = viewModel
         binding.lifecycleOwner = this
 
+        binding.passwordCheck.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(p0: Editable?) {}
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
+
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                if(binding.password.text.toString() == binding.passwordCheck.text.toString()){
+                    binding.passwordCheckText.text = "비밀번호 일치!"
+                    binding.passwordCheckText.setTextColor(Color.parseColor("#AAAAAA"))
+                }else{
+                    binding.passwordCheckText.text = "비밀번호 불일치!"
+                    binding.passwordCheckText.setTextColor(Color.parseColor("#DC3B3B"))
+                }
+            }
+        })
+
         viewModel.startSignUp.observe(this, Observer {
             if (it == true) {
                 viewModel.setRegisterValue(
@@ -47,23 +64,9 @@ class SignUpActivity : AppCompatActivity(), ProgressListener, KodeinAware {
             }
         })
 
-        binding.passwordCheck.addTextChangedListener(object : TextWatcher {
-            override fun afterTextChanged(p0: Editable?) {}
-            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
-
-            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                if(binding.password.text.toString() == binding.passwordCheck.text.toString()){
-                    binding.passwordCheckText.text = "비밀번호 일치!"
-                }else{
-                    binding.passwordCheckText.text = "비밀번호 불일치!"
-                }
-            }
-
-        })
-
-        viewModel.startSignUpInfo.observe(this, Observer {
+        viewModel.startMain.observe(this, Observer {
             if (it == true) {
-                startActivity(Intent(this, SignUpInfoActivity::class.java))
+                startActivity(Intent(this, MainActivity::class.java))
             }
         })
 

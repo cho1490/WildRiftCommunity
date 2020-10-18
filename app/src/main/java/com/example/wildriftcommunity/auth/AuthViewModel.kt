@@ -28,14 +28,6 @@ class AuthViewModel(private val authRepository : AuthRepository) : ViewModel() {
     val passwordCheck : LiveData<String>
         get() = _passwordCheck
 
-    private var _nickname = MutableLiveData<String>()
-    val nickname : LiveData<String>
-        get() = _nickname
-
-    private var _nicknameCheck = MutableLiveData<String>()
-    val nicknameCheck : LiveData<String>
-        get() = _nicknameCheck
-
     private var _startLogin = MutableLiveData<Boolean>()
     val startLogin : LiveData<Boolean>
         get() = _startLogin
@@ -44,13 +36,10 @@ class AuthViewModel(private val authRepository : AuthRepository) : ViewModel() {
     val startSignUp : LiveData<Boolean>
         get() = _startSignUp
 
-    private var _startSignUpInfo = MutableLiveData<Boolean>()
-    val startSignUpInfo : LiveData<Boolean>
-        get() = _startSignUpInfo
+    private var _startMain = MutableLiveData<Boolean>()
+    val startMain : LiveData<Boolean>
+        get() = _startMain
 
-    private var _checkNickname = MutableLiveData<Boolean>()
-    val checkNickname : LiveData<Boolean>
-        get() = _checkNickname
 
     //LoginActivity
     fun login() {
@@ -82,54 +71,30 @@ class AuthViewModel(private val authRepository : AuthRepository) : ViewModel() {
     }
 
     //SignUpActivity
-    fun register(view : View) {
+    fun register() {
         _startSignUp.value = true
         _startSignUp.value = false
         progressListener?.onStarted()
 
         val disposable = authRepository.register(email.value!!, password.value!!)
             .andThen(authRepository.login(email.value!!, password.value!!))
-            .andThen(authRepository.saveUser(email.value!!))
+            .andThen(authRepository.createUserFirestore(email.value!!))
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({
                 progressListener?.onSuccess("가입 성공!")
-                _startSignUpInfo.value = true
+                _startMain.value = true
             }, {
                 progressListener?.onFailure(it.message!!)
-                _startSignUpInfo.value = false
+                _startMain.value = false
             })
 
         disposables.add(disposable)
-
     }
 
     fun setRegisterValue(email: String, password: String){
         _email.value = email
         _password.value = password
-    }
-
-
-    //SignUpInfoActivity
-    fun checkNickname() {
-        _checkNickname.value = true
-        progressListener?.onStarted()
-
-        val disposable = authRepository.checkNickname(nickname.value!!)
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe({
-                progressListener?.onSuccess("사용 가능한 닉네임 입니다!")
-            }, {
-                progressListener?.onFailure("이미 사용중인 닉네임 입니다!")
-                _checkNickname.value = false
-            })
-
-        disposables.add(disposable)
-    }
-
-    fun setCheckNicknameValue(nickname: String){
-        _nickname.value = nickname
     }
 
     override fun onCleared() {

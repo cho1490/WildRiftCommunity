@@ -1,9 +1,10 @@
 package com.example.wildriftcommunity.auth
 
+import com.example.wildriftcommunity.model.User
+import com.example.wildriftcommunity.model.UserName
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import io.reactivex.Completable
-import java.lang.Exception
 
 class AuthRepository() {
 
@@ -36,12 +37,12 @@ class AuthRepository() {
             }
         }
 
-    fun saveUser(email: String) =
+    fun createUserFirestore(email: String) =
         Completable.create { emitter ->
 
             val user = User(email)
             val usersRef = firebaseFirestore.collection("users")
-            usersRef.document(currentUser()!!.uid)
+            usersRef.document(firebaseAuth.currentUser!!.uid)
                 .set(user)
                 .addOnCompleteListener {
                     if (!emitter.isDisposed) {
@@ -51,29 +52,6 @@ class AuthRepository() {
                             emitter.onError(it.exception!!)
                     }
                 }
-        }
-
-    fun saveUserDetail(nickname: String) =
-        Completable.create { emitter ->
-
-            val user = UserName(nickname)
-            val usersRef = firebaseFirestore.collection("userNames")
-            usersRef.document(currentUser()!!.uid)
-                .set(user)
-                .addOnCompleteListener {
-                    if (!emitter.isDisposed) {
-                        if (!it.isSuccessful) {
-                            emitter.onError(it.exception!!)
-                        }
-                    }
-                }
-
-            emitter.onComplete()
-        }
-
-    fun checkNickname(nickname: String) =
-        Completable.create { emitter ->
-
         }
 
 }
