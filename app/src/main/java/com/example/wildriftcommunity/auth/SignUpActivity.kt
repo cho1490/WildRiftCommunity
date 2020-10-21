@@ -1,6 +1,5 @@
 package com.example.wildriftcommunity.auth
 
-import android.app.Application
 import android.content.Intent
 import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
@@ -14,7 +13,6 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.example.wildriftcommunity.ProgressListener
 import com.example.wildriftcommunity.R
-import com.example.wildriftcommunity.databinding.ActivityLoginBinding
 import com.example.wildriftcommunity.databinding.ActivitySignUpBinding
 import com.example.wildriftcommunity.main.MainActivity
 import kotlinx.android.synthetic.main.activity_login.*

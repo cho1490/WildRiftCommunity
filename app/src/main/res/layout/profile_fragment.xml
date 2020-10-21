@@ -94,6 +94,7 @@
                     android:id="@+id/introduce"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:maxLength="51"
                     android:textSize="16dp"/>
 
                     <Button
