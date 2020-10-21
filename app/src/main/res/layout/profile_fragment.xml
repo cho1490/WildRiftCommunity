@@ -1,13 +1,216 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".profile.ProfileFragment">
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <TextView
+    <data>
+        <variable
+            name="profileViewModel"
+            type="com.example.wildriftcommunity.profile.ProfileViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="Hello" />
+        android:layout_height="match_parent">
 
-</FrameLayout>
+        <LinearLayout
+            android:id="@+id/block1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/block2">
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/profileImage"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:layout_margin="10dp"
+                    android:background="#000000"/>
+
+                <Button
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:layout_alignBottom="@id/profileImage"
+                    android:layout_alignRight="@id/profileImage"
+                    android:background="@drawable/ic_baseline_photo_camera_24"
+                    android:visibility="gone"/>
+
+            </RelativeLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp">
+
+                    <TextView
+                        android:id="@+id/nickname"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="19dp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toStartOf="@id/nicknameModify"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"/>
+
+                    <Button
+                        android:id="@+id/nicknameModify"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:background="@drawable/ic_baseline_edit_24"
+                        android:layout_marginStart="15dp"
+                        app:layout_constraintStart_toEndOf="@id/nickname"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        android:visibility="gone"/>
+
+                    <Button
+                        android:id="@+id/modify"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="프로필 편집"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"/>
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginEnd="10dp">
+
+                <TextView
+                    android:id="@+id/introduce"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="16dp"/>
+
+                    <Button
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:layout_alignBottom="@id/introduce"
+                        android:layout_alignRight="@id/introduce"
+                        android:background="@drawable/ic_baseline_edit_24"
+                        android:visibility="gone"/>
+
+                </RelativeLayout>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/block2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/block1"
+            android:layout_marginTop="20dp">
+
+            <LinearLayout
+                android:id="@+id/postCountBlock"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/likeCountBlock"
+                android:orientation="vertical"
+                android:layout_margin="10dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="15dp"
+                    android:layout_gravity="center"
+                    android:text="게시글"/>
+
+                <TextView
+                    android:id="@+id/postCountText"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="5dp"
+                    android:textSize="18dp"
+                    android:gravity="center"
+                    android:layout_gravity="center"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/likeCountBlock"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                app:layout_constraintStart_toEndOf="@id/postCountBlock"
+                app:layout_constraintEnd_toStartOf="@id/kindCountBlock"
+                android:orientation="vertical"
+                android:layout_margin="10dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="15dp"
+                    android:layout_gravity="center"
+                    android:text="좋아요"/>
+
+                <TextView
+                    android:id="@+id/likeCountText"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="5dp"
+                    android:textSize="18dp"
+                    android:gravity="center"
+                    android:layout_gravity="center"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/kindCountBlock"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                app:layout_constraintStart_toEndOf="@id/likeCountBlock"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:orientation="vertical"
+                android:layout_margin="10dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="15dp"
+                    android:layout_gravity="center"
+                    android:text="매너 점수"/>
+
+                <TextView
+                    android:id="@+id/kindScoreText"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="5dp"
+                    android:textSize="18dp"
+                    android:gravity="center"
+                    android:layout_gravity="center"/>
+
+            </LinearLayout>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <ProgressBar
+            android:id="@+id/progressbar"
+            android:visibility="gone"
+            android:layout_centerInParent="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

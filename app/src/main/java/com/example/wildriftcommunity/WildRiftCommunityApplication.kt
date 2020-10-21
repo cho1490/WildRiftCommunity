@@ -1,8 +1,11 @@
 package com.example.wildriftcommunity
 
 import android.app.Application
-import com.example.wildriftcommunity.auth.AuthRepository
+import com.example.wildriftcommunity.data.repositories.AuthRepository
 import com.example.wildriftcommunity.auth.AuthViewModelFactory
+import com.example.wildriftcommunity.data.repositories.ProfileRepository
+import com.example.wildriftcommunity.profile.ProfileViewModelFactory
+import com.example.wildriftcommunity.util.FirebaseSource
 import org.kodein.di.Kodein
 import org.kodein.di.KodeinAware
 import org.kodein.di.android.x.androidXModule
@@ -16,8 +19,12 @@ class WildRiftCommunityApplication : Application(), KodeinAware {
     override val kodein = Kodein.lazy {
         import(androidXModule(this@WildRiftCommunityApplication))
 
-        bind() from singleton { AuthRepository() }
+        bind() from singleton { FirebaseSource() }
+        bind() from singleton { AuthRepository( instance()) }
+        bind() from singleton { ProfileRepository( instance()) }
+
         bind() from provider { AuthViewModelFactory( instance()) }
+        bind() from provider { ProfileViewModelFactory( instance()) }
 
     }
 

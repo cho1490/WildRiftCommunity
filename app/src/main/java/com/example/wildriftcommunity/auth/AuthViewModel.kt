@@ -6,6 +6,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.wildriftcommunity.ProgressListener
+import com.example.wildriftcommunity.data.repositories.AuthRepository
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
@@ -14,7 +15,6 @@ class AuthViewModel(private val authRepository : AuthRepository) : ViewModel() {
 
     var progressListener : ProgressListener? = null
     private val disposables = CompositeDisposable()
-
 
     private var _email = MutableLiveData<String>()
     val email : LiveData<String>
@@ -78,7 +78,7 @@ class AuthViewModel(private val authRepository : AuthRepository) : ViewModel() {
 
         val disposable = authRepository.register(email.value!!, password.value!!)
             .andThen(authRepository.login(email.value!!, password.value!!))
-            .andThen(authRepository.createUserFirestore(email.value!!))
+            .andThen(authRepository.createUser(email.value!!))
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({
