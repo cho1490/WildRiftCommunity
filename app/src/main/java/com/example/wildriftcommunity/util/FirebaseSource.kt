@@ -1,5 +1,6 @@
 package com.example.wildriftcommunity.util
 
+import com.example.wildriftcommunity.data.models.Post
 import com.example.wildriftcommunity.data.models.User
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -70,6 +71,20 @@ class FirebaseSource {
                         emitter.onComplete()
                     } else
                         emitter.onError(it.exception!!)
+                }
+        }
+
+    fun createPost(post: Post) =
+        Completable.create { emitter ->
+            val postRef = db.collection("posts")
+            postRef.document().set(post)
+                .addOnCompleteListener {
+                    if (!emitter.isDisposed) {
+                        if (it.isSuccessful){
+                            emitter.onComplete()
+                        } else
+                            emitter.onError(it.exception!!)
+                    }
                 }
         }
 

@@ -44,6 +44,7 @@ class AuthViewModel(private val authRepository : AuthRepository) : ViewModel() {
     //LoginActivity
     fun login() {
         _startLogin.value = true
+        _startLogin.value = false
         progressListener?.onStarted()
 
         val disposable = authRepository.login(email.value!!, password.value!!)
@@ -56,7 +57,6 @@ class AuthViewModel(private val authRepository : AuthRepository) : ViewModel() {
             })
 
         disposables.add(disposable)
-        _startLogin.value = false
     }
 
     fun setLoginValues(email: String, password: String) {

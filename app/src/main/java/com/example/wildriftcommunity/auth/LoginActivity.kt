@@ -45,17 +45,17 @@ class LoginActivity : AppCompatActivity(), ProgressListener, KodeinAware {
     }
 
     override fun onStarted() {
-        progressbar.visibility = View.VISIBLE
+        progressbarLogin.visibility = View.VISIBLE
     }
 
     override fun onSuccess(message: String) {
-        progressbar.visibility = View.GONE
+        progressbarLogin.visibility = View.GONE
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
         startHomeActivity()
     }
 
     override fun onFailure(message: String) {
-        progressbar.visibility = View.GONE
+        progressbarLogin.visibility = View.GONE
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
     }
 }

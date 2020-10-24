@@ -15,7 +15,7 @@ import com.example.wildriftcommunity.ProgressListener
 import com.example.wildriftcommunity.R
 import com.example.wildriftcommunity.databinding.ActivitySignUpBinding
 import com.example.wildriftcommunity.main.MainActivity
-import kotlinx.android.synthetic.main.activity_login.*
+import kotlinx.android.synthetic.main.activity_sign_up.*
 import org.kodein.di.KodeinAware
 import org.kodein.di.android.kodein
 import org.kodein.di.generic.instance
@@ -71,16 +71,16 @@ class SignUpActivity : AppCompatActivity(), ProgressListener, KodeinAware {
     }
 
     override fun onStarted() {
-        progressbar.visibility = View.VISIBLE
+        progressbarSignUp.visibility = View.VISIBLE
     }
 
     override fun onSuccess(message: String) {
-        progressbar.visibility = View.GONE
+        progressbarSignUp.visibility = View.GONE
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
     }
 
     override fun onFailure(message: String) {
-        progressbar.visibility = View.GONE
+        progressbarSignUp.visibility = View.GONE
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
     }
 }

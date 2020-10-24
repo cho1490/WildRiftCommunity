@@ -12,7 +12,7 @@ import androidx.lifecycle.Observer
 import com.example.wildriftcommunity.ProgressListener
 import com.example.wildriftcommunity.R
 import com.example.wildriftcommunity.databinding.ProfileFragmentBinding
-import kotlinx.android.synthetic.main.activity_login.*
+import kotlinx.android.synthetic.main.activity_main.*
 import org.kodein.di.android.x.kodein
 import org.kodein.di.KodeinAware
 import org.kodein.di.generic.instance
@@ -48,15 +48,15 @@ class ProfileFragment : Fragment(), KodeinAware, ProgressListener {
     }
 
     override fun onStarted() {
-        //progressbar.visibility = View.VISIBLE
+        progressbarMain.visibility = View.VISIBLE
     }
 
     override fun onSuccess(message: String) {
-        //progressbar.visibility = View.GONE
+        progressbarMain.visibility = View.GONE
     }
 
     override fun onFailure(message: String) {
-        //progressbar.visibility = View.GONE
+        progressbarMain.visibility = View.GONE
         Toast.makeText(activity, message, Toast.LENGTH_SHORT).show()
     }
 
