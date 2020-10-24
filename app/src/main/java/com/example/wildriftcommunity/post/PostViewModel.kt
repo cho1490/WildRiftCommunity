@@ -1,5 +1,7 @@
 package com.example.wildriftcommunity.post
 
+import android.content.Intent
+import android.net.Uri
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -17,29 +19,31 @@ class PostViewModel(private val postRepository: PostRepository) : ViewModel() {
     private val disposables = CompositeDisposable()
 
     private var _title = MutableLiveData<String>()
-    val title : LiveData<String>
+    val title: LiveData<String>
         get() = _title
 
     private var _body = MutableLiveData<String>()
-    val body : LiveData<String>
+    val body: LiveData<String>
         get() = _body
 
-    private var _photoUri = MutableLiveData<String>()
-    val photoUri : LiveData<String>
+    private var _photoUri = MutableLiveData<Uri>()
+    val photoUri: LiveData<Uri>
         get() = _photoUri
 
-    private var _startCreatePost = MutableLiveData<Boolean>()
-    val startCreatePost : LiveData<Boolean>
-        get() = _startCreatePost
+    private var _startPickImage = MutableLiveData<Boolean>()
+    val startPickImage: LiveData<Boolean>
+        get() = _startPickImage
 
+    private var _startCreatePost = MutableLiveData<Boolean>()
+    val startCreatePost: LiveData<Boolean>
+        get() = _startCreatePost
 
     fun createPost() {
         _startCreatePost.value = true
         _startCreatePost.value = true
         progressListener?.onStarted()
 
-        val post = Post(title.value!!, body.value!!)
-        val disposable = postRepository.createPost(post)
+        val disposable = postRepository.createPost(title.value!!, body.value!!, photoUri.value!!)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({
@@ -51,9 +55,15 @@ class PostViewModel(private val postRepository: PostRepository) : ViewModel() {
         disposables.add(disposable)
     }
 
-    fun setCreatePostValues(title: String, body: String) {
+    fun setCreatePostValues(title: String, body: String, photoUri: Uri?) {
         _title.value = title
         _body.value = body
+        _photoUri.value = photoUri
+    }
+
+    fun goToPickImage(){
+        _startPickImage.value = true
+        _startPickImage.value = false
     }
 
 }

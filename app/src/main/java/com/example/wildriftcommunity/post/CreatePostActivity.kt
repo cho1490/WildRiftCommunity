@@ -1,5 +1,8 @@
 package com.example.wildriftcommunity.post
 
+import android.app.Activity
+import android.content.Intent
+import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
@@ -22,6 +25,9 @@ class CreatePostActivity : AppCompatActivity(), ProgressListener, KodeinAware {
     private lateinit var viewModel : PostViewModel
     private lateinit var binding : ActivityCreatePostBinding
 
+    var photoUri : Uri? = null
+    var PICK_IMAGE_FROM_ALBUM = 0
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -36,11 +42,31 @@ class CreatePostActivity : AppCompatActivity(), ProgressListener, KodeinAware {
             if (it == true){
                 viewModel.setCreatePostValues(
                     binding.postTitle.text.toString(),
-                    binding.postBody.text.toString()
+                    binding.postBody.text.toString(),
+                    photoUri
                 )
             }
         })
 
+        viewModel.startPickImage.observe(this, Observer {
+            if (it == true){
+                var photoPickerIntent = Intent(Intent.ACTION_PICK)
+                photoPickerIntent.type = "image/*"
+                startActivityForResult(photoPickerIntent, PICK_IMAGE_FROM_ALBUM)
+            }
+        })
+
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == PICK_IMAGE_FROM_ALBUM){
+            if(resultCode == Activity.RESULT_OK ){
+                photoUri = data?.data
+                binding.image.setImageURI(photoUri)
+            } else
+                finish()
+        }
     }
 
 

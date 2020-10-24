@@ -13,6 +13,7 @@ import com.example.wildriftcommunity.ProgressListener
 import com.example.wildriftcommunity.R
 import com.example.wildriftcommunity.databinding.ProfileFragmentBinding
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.profile_fragment.*
 import org.kodein.di.android.x.kodein
 import org.kodein.di.KodeinAware
 import org.kodein.di.generic.instance
@@ -34,8 +35,6 @@ class ProfileFragment : Fragment(), KodeinAware, ProgressListener {
         binding.profileViewModel = profileViewModel
         profileViewModel.progressListener = this
 
-        profileViewModel.fetchUserDetail()
-
         profileViewModel.userDetails.observe(viewLifecycleOwner, Observer {
             binding.nickname.text = it.nickname
             binding.introduce.text = it.introduce
@@ -47,16 +46,21 @@ class ProfileFragment : Fragment(), KodeinAware, ProgressListener {
         return binding.root
     }
 
+    override fun onStart() {
+        super.onStart()
+        profileViewModel.fetchUserDetail()
+    }
+
     override fun onStarted() {
-        progressbarMain.visibility = View.VISIBLE
+        progressbarProfile.visibility = View.VISIBLE
     }
 
     override fun onSuccess(message: String) {
-        progressbarMain.visibility = View.GONE
+        progressbarProfile.visibility = View.GONE
     }
 
     override fun onFailure(message: String) {
-        progressbarMain.visibility = View.GONE
+        progressbarProfile.visibility = View.GONE
         Toast.makeText(activity, message, Toast.LENGTH_SHORT).show()
     }
 
