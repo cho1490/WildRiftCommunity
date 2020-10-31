@@ -1,14 +1,11 @@
 package com.example.wildriftcommunity.post
 
-import android.content.Intent
 import android.net.Uri
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.wildriftcommunity.ProgressListener
-import com.example.wildriftcommunity.data.models.Post
 import com.example.wildriftcommunity.data.repositories.PostRepository
-import io.reactivex.Scheduler
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers

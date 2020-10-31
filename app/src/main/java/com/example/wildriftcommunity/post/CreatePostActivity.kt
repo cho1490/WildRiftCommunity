@@ -69,7 +69,6 @@ class CreatePostActivity : AppCompatActivity(), ProgressListener, KodeinAware {
         }
     }
 
-
     override fun onStarted() {
         progressbarCreatePost.visibility = View.VISIBLE
     }

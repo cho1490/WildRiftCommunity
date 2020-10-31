@@ -17,6 +17,7 @@ class FirebaseSource {
     private val db: FirebaseFirestore by lazy { FirebaseFirestore.getInstance() }
     private val storage: StorageReference by lazy { FirebaseStorage.getInstance().reference }
 
+    lateinit var nickname: String
     lateinit var userDetails: User
 
     fun currentUser() = auth.currentUser
@@ -47,7 +48,6 @@ class FirebaseSource {
 
     fun createUser(email: String) =
         Completable.create { emitter ->
-
             val user = User(email)
             val usersRef = db.collection("users")
             usersRef.document(auth.currentUser!!.uid)
@@ -79,8 +79,12 @@ class FirebaseSource {
 
     fun createPost(title: String, body: String, photoUri: Uri?) =
         Completable.create { emitter ->
-            val userRef = db.collection("posts")
 
+            db.collection("users").document(currentUser()!!.uid).get().addOnSuccessListener {
+                nickname = it["nickname"].toString()
+            }
+
+            val userRef = db.collection("posts")
             if (photoUri != null) {
                 val timeStamp = SimpleDateFormat("yyyy-mm-dd_HH:mm:ss").format(Date())
                 val imageFileName = "Image_" + timeStamp + "_.png"
@@ -89,7 +93,7 @@ class FirebaseSource {
                 storageRef.putFile(photoUri!!).continueWithTask {
                     return@continueWithTask storageRef.downloadUrl
                 }.addOnSuccessListener { uri ->
-                    val post = Post(title, body, uri.toString())
+                    val post = Post(title, body, uri.toString(), currentUser()!!.uid, nickname, System.currentTimeMillis())
                     userRef.document().set(post)
                         .addOnCompleteListener {
                             if (!emitter.isDisposed) {
