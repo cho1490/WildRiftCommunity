@@ -1,4 +1,4 @@
-package com.example.wildriftcommunity.post
+package com.example.wildriftcommunity.post.view
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle

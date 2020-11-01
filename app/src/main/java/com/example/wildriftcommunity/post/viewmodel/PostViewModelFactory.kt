@@ -1,4 +1,4 @@
-package com.example.wildriftcommunity.post
+package com.example.wildriftcommunity.post.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
@@ -8,6 +8,8 @@ import com.example.wildriftcommunity.data.repositories.PostRepository
 class PostViewModelFactory (private val postRepository: PostRepository) : ViewModelProvider.NewInstanceFactory() {
 
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-        return PostViewModel(postRepository) as T
+        return PostViewModel(
+            postRepository
+        ) as T
     }
 }

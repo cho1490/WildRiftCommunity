@@ -94,7 +94,6 @@
                 android:layout_height="wrap_content"
                 android:text="좋아요"
                 android:background="#FFFFFF"
-                drawable
                 android:drawableStart="@drawable/ic_baseline_favorite_border_24"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
@@ -109,10 +108,10 @@
                 android:drawableStart="@drawable/ic_baseline_comment_24"
                 app:layout_constraintStart_toEndOf="@id/btn_postListItemLike"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintEnd_toStartOf="@id/hi"/>
+                app:layout_constraintEnd_toStartOf="@id/any"/>
 
             <Button
-                android:id="@+id/hi"
+                android:id="@+id/any"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:background="#FFFFFF"

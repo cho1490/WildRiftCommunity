@@ -1,4 +1,4 @@
-package com.example.wildriftcommunity.post
+package com.example.wildriftcommunity.post.viewmodel
 
 import android.net.Uri
 import androidx.lifecycle.LiveData

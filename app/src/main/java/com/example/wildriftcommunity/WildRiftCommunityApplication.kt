@@ -5,7 +5,7 @@ import com.example.wildriftcommunity.data.repositories.AuthRepository
 import com.example.wildriftcommunity.auth.AuthViewModelFactory
 import com.example.wildriftcommunity.data.repositories.PostRepository
 import com.example.wildriftcommunity.data.repositories.ProfileRepository
-import com.example.wildriftcommunity.post.PostViewModelFactory
+import com.example.wildriftcommunity.post.viewmodel.PostViewModelFactory
 import com.example.wildriftcommunity.profile.ProfileViewModelFactory
 import com.example.wildriftcommunity.util.FirebaseSource
 import org.kodein.di.Kodein
@@ -27,7 +27,11 @@ class WildRiftCommunityApplication : Application(), KodeinAware {
         bind() from singleton { ProfileRepository( instance()) }
 
         bind() from provider { AuthViewModelFactory( instance()) }
-        bind() from provider { PostViewModelFactory( instance()) }
+        bind() from provider {
+            PostViewModelFactory(
+                instance()
+            )
+        }
         bind() from provider { ProfileViewModelFactory( instance()) }
 
     }

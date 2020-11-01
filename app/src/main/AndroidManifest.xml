@@ -19,8 +19,8 @@
         </activity>
         <activity android:name=".auth.SignUpActivity" />
         <activity android:name=".main.MainActivity" />
-        <activity android:name=".post.PostInfoActivity" />
-        <activity android:name=".post.CreatePostActivity" />
+        <activity android:name=".post.view.PostInfoActivity" />
+        <activity android:name=".post.view.CreatePostActivity" />
         <activity android:name=".chat.ChatInfoActivity" />
     </application>
 
