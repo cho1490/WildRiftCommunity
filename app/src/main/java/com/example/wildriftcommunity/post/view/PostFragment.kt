@@ -28,6 +28,8 @@ class PostFragment : Fragment(), ProgressListener, KodeinAware {
     private val factory: PostViewModelFactory by instance()
     lateinit var postList: List<Post>
 
+    var postType: String = "Free"
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -52,7 +54,7 @@ class PostFragment : Fragment(), ProgressListener, KodeinAware {
 
     override fun onStart() {
         super.onStart()
-        postViewModel.setPostList()
+        postViewModel.setPostList(postType)
     }
 
     override fun onStarted() {

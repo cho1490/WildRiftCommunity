@@ -20,41 +20,41 @@
                 android:id="@+id/btn_postFragmentFree"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="자유 게시판"
                 android:layout_margin="10dp"
+                android:text="자유 게시판"
+                app:layout_constraintEnd_toStartOf="@id/btn_postFragmentDuo"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintEnd_toStartOf="@id/btn_postFragmentDuo"/>
+                app:layout_constraintTop_toTopOf="parent" />
 
             <Button
                 android:id="@+id/btn_postFragmentDuo"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="듀오 게시판"
                 android:layout_margin="10dp"
+                android:text="듀오 게시판"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@id/btn_postFragmentFree"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintEnd_toEndOf="parent" />
+                app:layout_constraintTop_toTopOf="parent" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_postFragmentPostList"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            app:layout_constraintTop_toBottomOf="@id/cl_postFragmentBtnBox"/>
+            android:layout_height="0dp"
+            app:layout_constraintTop_toBottomOf="@id/cl_postFragmentBtnBox"
+            app:layout_constraintBottom_toBottomOf="parent"/>
 
         <ProgressBar
             android:id="@+id/progressbarPost"
-            android:visibility="gone"
-            android:layout_centerInParent="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
+            android:layout_centerInParent="true"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"/>
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

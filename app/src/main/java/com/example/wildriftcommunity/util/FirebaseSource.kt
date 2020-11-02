@@ -5,6 +5,7 @@ import com.example.wildriftcommunity.data.models.Post
 import com.example.wildriftcommunity.data.models.User
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.Query
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import io.reactivex.Completable
@@ -79,7 +80,7 @@ class FirebaseSource {
                 }
         }
 
-    fun createPost(title: String, body: String, photoUri: Uri?) =
+    fun createPost(type: String, title: String, body: String, photoUri: Uri?) =
         Completable.create { emitter ->
             var user: User? = null
             db.collection("users").document(currentUser()!!.uid).get()
@@ -96,7 +97,7 @@ class FirebaseSource {
                     return@continueWithTask storageRef.downloadUrl
                 }.addOnSuccessListener { uri ->
                     val post =
-                        Post("Free", title, body, uri.toString(), System.currentTimeMillis(), user)
+                        Post(type, title, body, uri.toString(), System.currentTimeMillis(), user)
                     userRef.document().set(post)
                         .addOnCompleteListener {
                             if (!emitter.isDisposed) {
@@ -124,7 +125,7 @@ class FirebaseSource {
     fun setPostList(type: String) =
         Completable.create { emitter ->
             val postsRef = db.collection("posts")
-            postsRef.whereEqualTo("type", type).orderBy("timestamp").get()
+            postsRef.whereEqualTo("type", type).orderBy("timestamp", Query.Direction.ASCENDING).get()
                 .addOnCompleteListener {
                     if (!emitter.isDisposed) {
                         if (it.isSuccessful) {

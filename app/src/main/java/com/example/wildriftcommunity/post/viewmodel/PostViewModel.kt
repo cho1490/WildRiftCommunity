@@ -15,6 +15,10 @@ class PostViewModel(private val postRepository: PostRepository) : ViewModel() {
     var progressListener : ProgressListener? = null
     private val disposables = CompositeDisposable()
 
+    private var _type = MutableLiveData<String>()
+    val type: LiveData<String>
+        get() = _type
+
     private var _title = MutableLiveData<String>()
     val title: LiveData<String>
         get() = _title
@@ -44,7 +48,7 @@ class PostViewModel(private val postRepository: PostRepository) : ViewModel() {
         _startCreatePost.value = false
         progressListener?.onStarted()
 
-        val disposable = postRepository.createPost(title.value!!, body.value!!, photoUri.value!!)
+        val disposable = postRepository.createPost(type.value!!, title.value!!, body.value!!, photoUri.value!!)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({
@@ -56,7 +60,8 @@ class PostViewModel(private val postRepository: PostRepository) : ViewModel() {
         disposables.add(disposable)
     }
 
-    fun setCreatePostValues(title: String, body: String, photoUri: Uri?) {
+    fun setCreatePostValues(type: String, title: String, body: String, photoUri: Uri?) {
+        _type.value = type
         _title.value = title
         _body.value = body
         _photoUri.value = photoUri
@@ -67,9 +72,10 @@ class PostViewModel(private val postRepository: PostRepository) : ViewModel() {
         _startPickImage.value = false
     }
 
-    fun setPostList(){
+    fun setPostList(postType: String){
+        _type.value = postType
         progressListener?.onStarted()
-        val disposable = postRepository.setPostList("Free")
+        val disposable = postRepository.setPostList(type.value!!)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({

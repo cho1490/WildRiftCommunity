@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="post_type_array">
+        <item>자유 게시판</item>
+        <item>듀오 게시판</item>
+    </string-array>
+</resources>

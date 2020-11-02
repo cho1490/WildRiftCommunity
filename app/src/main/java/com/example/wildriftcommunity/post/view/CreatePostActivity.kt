@@ -6,6 +6,8 @@ import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
@@ -38,10 +40,12 @@ class CreatePostActivity : AppCompatActivity(), ProgressListener, KodeinAware {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_create_post)
         binding.postViewModel = viewModel
         binding.lifecycleOwner = this
+        var type: String = "Free"
 
         viewModel.startCreatePost.observe(this, Observer{
             if (it == true){
                 viewModel.setCreatePostValues(
+                    type,
                     binding.postTitle.text.toString(),
                     binding.postBody.text.toString(),
                     photoUri
@@ -57,6 +61,24 @@ class CreatePostActivity : AppCompatActivity(), ProgressListener, KodeinAware {
             }
         })
 
+        val items = resources.getStringArray(R.array.post_type_array)
+        val spinnerAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, items)
+        binding.postTypeSpinner.adapter = spinnerAdapter
+        binding.postTypeSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onNothingSelected(p0: AdapterView<*>?) {
+
+            }
+            override fun onItemSelected(parent: AdapterView<*>, view: View, position: Int, id: Long) {
+                when(position){
+                    0 -> {
+                        type = "Free"
+                    }
+                    1 -> {
+                        type = "Duo"
+                    }
+                }
+            }
+        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

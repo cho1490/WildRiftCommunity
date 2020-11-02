@@ -5,7 +5,7 @@ import com.example.wildriftcommunity.util.FirebaseSource
 
 class PostRepository(private val firebase: FirebaseSource){
 
-    fun createPost(title: String, body: String, photoUri: Uri?) = firebase.createPost(title, body, photoUri)
+    fun createPost(type:String, title: String, body: String, photoUri: Uri?) = firebase.createPost(type, title, body, photoUri)
 
     fun setPostList(type: String) = firebase.setPostList(type)
 
