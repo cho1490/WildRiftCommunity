@@ -8,6 +8,8 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.wildriftcommunity.ProgressListener
 import com.example.wildriftcommunity.R
 import com.example.wildriftcommunity.data.models.Post
@@ -38,10 +40,10 @@ class PostFragment : Fragment(), ProgressListener, KodeinAware {
             if(it == true) {
                 postList = postViewModel.getPostList()
                 rv_postFragmentPostList.apply {
+                    layoutManager = LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
                     setHasFixedSize(true)
                     adapter = PostListAdapter(postList)
                 }
-                rv_postFragmentPostList.adapter!!.notifyDataSetChanged()
             }
         })
 

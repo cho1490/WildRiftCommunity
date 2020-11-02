@@ -92,7 +92,7 @@ class FirebaseSource {
                 val imageFileName = "Image_" + timeStamp + "_.png"
                 val storageRef = storage.child("images/").child(imageFileName)
 
-                storageRef.putFile(photoUri!!).continueWithTask {
+                storageRef.putFile(photoUri).continueWithTask {
                     return@continueWithTask storageRef.downloadUrl
                 }.addOnSuccessListener { uri ->
                     val post =
@@ -137,7 +137,6 @@ class FirebaseSource {
                         } else
                             emitter.onError(it.exception!!)
                     }
-
                 }
         }
 
