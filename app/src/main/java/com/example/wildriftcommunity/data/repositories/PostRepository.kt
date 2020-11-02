@@ -7,4 +7,8 @@ class PostRepository(private val firebase: FirebaseSource){
 
     fun createPost(title: String, body: String, photoUri: Uri?) = firebase.createPost(title, body, photoUri)
 
+    fun setPostList(type: String) = firebase.setPostList(type)
+
+    fun getPostList() = firebase.postList
+
 }

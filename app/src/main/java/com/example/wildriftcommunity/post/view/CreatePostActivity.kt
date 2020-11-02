@@ -28,11 +28,10 @@ class CreatePostActivity : AppCompatActivity(), ProgressListener, KodeinAware {
     private lateinit var binding : ActivityCreatePostBinding
 
     var photoUri : Uri? = null
-    var PICK_IMAGE_FROM_ALBUM = 0
+    private var PICK_IMAGE_FROM_ALBUM = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         viewModel = ViewModelProvider(this, factory).get(PostViewModel::class.java)
         viewModel.progressListener = this
 

@@ -1,8 +1,6 @@
 package com.example.wildriftcommunity.util
 
-import android.app.Application
 import android.net.Uri
-import android.widget.Toast
 import com.example.wildriftcommunity.data.models.Post
 import com.example.wildriftcommunity.data.models.User
 import com.google.firebase.auth.FirebaseAuth
@@ -12,6 +10,7 @@ import com.google.firebase.storage.StorageReference
 import io.reactivex.Completable
 import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.collections.ArrayList
 
 class FirebaseSource {
 
@@ -20,40 +19,41 @@ class FirebaseSource {
     private val storage: StorageReference by lazy { FirebaseStorage.getInstance().reference }
 
     lateinit var userDetails: User
-    lateinit var postList: List<Post>
+    var postList = ArrayList<Post>()
 
     fun currentUser() = auth.currentUser
 
     fun login(email: String, password: String) =
         Completable.create { emitter ->
-            auth.signInWithEmailAndPassword(email, password).addOnCompleteListener {
-                if (!emitter.isDisposed) {
-                    if (it.isSuccessful) {
-                        emitter.onComplete()
-                    } else
-                        emitter.onError(it.exception!!)
+            auth.signInWithEmailAndPassword(email, password)
+                .addOnCompleteListener {
+                    if (!emitter.isDisposed) {
+                        if (it.isSuccessful) {
+                            emitter.onComplete()
+                        } else
+                            emitter.onError(it.exception!!)
+                    }
                 }
-            }
         }
 
     fun register(email: String, password: String) =
         Completable.create { emitter ->
-            auth.createUserWithEmailAndPassword(email, password).addOnCompleteListener {
-                if (!emitter.isDisposed) {
-                    if (it.isSuccessful) {
-                        emitter.onComplete()
-                    } else
-                        emitter.onError(it.exception!!)
+            auth.createUserWithEmailAndPassword(email, password)
+                .addOnCompleteListener {
+                    if (!emitter.isDisposed) {
+                        if (it.isSuccessful) {
+                            emitter.onComplete()
+                        } else
+                            emitter.onError(it.exception!!)
+                    }
                 }
-            }
         }
 
     fun createUser(email: String) =
         Completable.create { emitter ->
             val user = User(email)
             val usersRef = db.collection("users")
-            usersRef.document(auth.currentUser!!.uid)
-                .set(user)
+            usersRef.document(auth.currentUser!!.uid).set(user)
                 .addOnCompleteListener {
                     if (!emitter.isDisposed) {
                         if (it.isSuccessful) {
@@ -82,9 +82,10 @@ class FirebaseSource {
     fun createPost(title: String, body: String, photoUri: Uri?) =
         Completable.create { emitter ->
             var user: User? = null
-            db.collection("users").document(currentUser()!!.uid).get().addOnCompleteListener {
-                user = it.result?.toObject(User::class.java)!!
-            }
+            db.collection("users").document(currentUser()!!.uid).get()
+                .addOnCompleteListener {
+                    user = it.result?.toObject(User::class.java)!!
+                }
             val userRef = db.collection("posts")
             if (photoUri != null) {
                 val timeStamp = SimpleDateFormat("yyyy-mm-dd_HH:mm:ss").format(Date())
@@ -94,7 +95,8 @@ class FirebaseSource {
                 storageRef.putFile(photoUri!!).continueWithTask {
                     return@continueWithTask storageRef.downloadUrl
                 }.addOnSuccessListener { uri ->
-                    val post = Post("Free", title, body, uri.toString(), System.currentTimeMillis(), user)
+                    val post =
+                        Post("Free", title, body, uri.toString(), System.currentTimeMillis(), user)
                     userRef.document().set(post)
                         .addOnCompleteListener {
                             if (!emitter.isDisposed) {
@@ -117,6 +119,26 @@ class FirebaseSource {
                         }
                     }
             }
+        }
+
+    fun setPostList(type: String) =
+        Completable.create { emitter ->
+            val postsRef = db.collection("posts")
+            postsRef.whereEqualTo("type", type).orderBy("timestamp").get()
+                .addOnCompleteListener {
+                    if (!emitter.isDisposed) {
+                        if (it.isSuccessful) {
+                            postList.clear()
+                            for (snapshot in it.result!!) {
+                                val item = snapshot.toObject(Post::class.java)
+                                postList.add(item)
+                            }
+                            emitter.onComplete()
+                        } else
+                            emitter.onError(it.exception!!)
+                    }
+
+                }
         }
 
 }

@@ -9,10 +9,10 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
+import com.bumptech.glide.Glide
 import com.example.wildriftcommunity.ProgressListener
 import com.example.wildriftcommunity.R
 import com.example.wildriftcommunity.databinding.ProfileFragmentBinding
-import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.profile_fragment.*
 import org.kodein.di.android.x.kodein
 import org.kodein.di.KodeinAware
@@ -36,11 +36,14 @@ class ProfileFragment : Fragment(), KodeinAware, ProgressListener {
         profileViewModel.progressListener = this
 
         profileViewModel.userDetails.observe(viewLifecycleOwner, Observer {
-            binding.nickname.text = it.nickname
-            binding.introduce.text = it.introduce
-            binding.postCountText.text = it.postCount.toString()
-            binding.likeCountText.text = it.lickCount.toString()
-            binding.kindScoreText.text = it.kindScore.toString()
+            binding.apply {
+                Glide.with(activity!!).load(it.photoUri).into(profileImage)
+                nickname.text = it.nickname
+                introduce.text = it.introduce
+                postCountText.text = it.postCount.toString()
+                likeCountText.text = it.lickCount.toString()
+                kindScoreText.text = it.kindScore.toString()
+            }
         })
 
         return binding.root

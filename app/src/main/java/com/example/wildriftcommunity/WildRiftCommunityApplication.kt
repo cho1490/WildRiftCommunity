@@ -27,11 +27,7 @@ class WildRiftCommunityApplication : Application(), KodeinAware {
         bind() from singleton { ProfileRepository( instance()) }
 
         bind() from provider { AuthViewModelFactory( instance()) }
-        bind() from provider {
-            PostViewModelFactory(
-                instance()
-            )
-        }
+        bind() from provider { PostViewModelFactory( instance()) }
         bind() from provider { ProfileViewModelFactory( instance()) }
 
     }

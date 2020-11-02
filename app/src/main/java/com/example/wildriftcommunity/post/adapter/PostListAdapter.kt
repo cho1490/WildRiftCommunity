@@ -28,12 +28,12 @@ class PostListAdapter(private val list: List<Post>): RecyclerView.Adapter<PostLi
 
         fun bind(item: Post){
             itemView.apply {
-                //Glide.with(this).load(item...).into(iv_postListItemProfileImage)
-                //tv_postListItemNickname.text = item...
-                tv_postListItemTime.text = item.timestamp.toString()
-                tv_postListItemTitle.text = item.title
-                tv_postListItemBody.text = item.body
-                Glide.with(this).load(item.imageUrl).into(iv_postListItemBodyImage)
+                Glide.with(this).load(item.userInfo!!.photoUri).into(iv_postListItemProfileImage) // profileImage
+                tv_postListItemNickname.text = item.userInfo!!.nickname // nickname
+                tv_postListItemTime.text = item.timestamp.toString() // timeStamp
+                tv_postListItemTitle.text = item.title // title
+                tv_postListItemBody.text = item.body // body
+                Glide.with(this).load(item.imageUrl).into(iv_postListItemBodyImage) // photo
             }
         }
     }

@@ -35,9 +35,13 @@ class PostViewModel(private val postRepository: PostRepository) : ViewModel() {
     val startCreatePost: LiveData<Boolean>
         get() = _startCreatePost
 
+    private var _startGetPost = MutableLiveData<Boolean>()
+    val startGetPost: LiveData<Boolean>
+        get() = _startGetPost
+
     fun createPost() {
         _startCreatePost.value = true
-        _startCreatePost.value = true
+        _startCreatePost.value = false
         progressListener?.onStarted()
 
         val disposable = postRepository.createPost(title.value!!, body.value!!, photoUri.value!!)
@@ -62,5 +66,23 @@ class PostViewModel(private val postRepository: PostRepository) : ViewModel() {
         _startPickImage.value = true
         _startPickImage.value = false
     }
+
+    fun setPostList(){
+        progressListener?.onStarted()
+        val disposable = postRepository.setPostList("Free")
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe({
+                progressListener?.onSuccess("")
+                _startGetPost.value = true
+                _startGetPost.value = false
+            }, {
+                progressListener?.onFailure("글 가져오기 실패!")
+            })
+
+        disposables.add(disposable)
+    }
+
+    fun getPostList() = postRepository.getPostList()
 
 }
