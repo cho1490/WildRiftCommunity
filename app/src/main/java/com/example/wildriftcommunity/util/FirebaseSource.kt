@@ -1,6 +1,8 @@
 package com.example.wildriftcommunity.util
 
+import android.app.Application
 import android.net.Uri
+import android.widget.Toast
 import com.example.wildriftcommunity.data.models.Post
 import com.example.wildriftcommunity.data.models.User
 import com.google.firebase.auth.FirebaseAuth
@@ -79,14 +81,16 @@ class FirebaseSource {
 
     fun createPost(title: String, body: String, photoUri: Uri?) =
         Completable.create { emitter ->
-            val user = db.collection("users").document(currentUser()!!.uid).get().result?.toObject(User::class.java)
-            println("csh : " + user!!.email + " - " + user!!.photoUri)
+            var user: User? = null
+            db.collection("users").document(currentUser()!!.uid).get().addOnCompleteListener {
+                user = it.result?.toObject(User::class.java)!!
+            }
             val userRef = db.collection("posts")
             if (photoUri != null) {
                 val timeStamp = SimpleDateFormat("yyyy-mm-dd_HH:mm:ss").format(Date())
                 val imageFileName = "Image_" + timeStamp + "_.png"
-
                 val storageRef = storage.child("images/").child(imageFileName)
+
                 storageRef.putFile(photoUri!!).continueWithTask {
                     return@continueWithTask storageRef.downloadUrl
                 }.addOnSuccessListener { uri ->
