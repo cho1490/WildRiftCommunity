@@ -91,4 +91,8 @@ class PostViewModel(private val postRepository: PostRepository) : ViewModel() {
 
     fun getPostList() = postRepository.getPostList()
 
+    override fun onCleared() {
+        super.onCleared()
+        disposables.dispose()
+    }
 }

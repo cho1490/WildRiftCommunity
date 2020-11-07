@@ -1,5 +1,6 @@
 package com.example.wildriftcommunity.profile
 
+import android.content.Intent
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -44,6 +45,10 @@ class ProfileFragment : Fragment(), KodeinAware, ProgressListener {
                 likeCountText.text = it.lickCount.toString()
                 kindScoreText.text = it.kindScore.toString()
             }
+        })
+
+        profileViewModel.startProfileEdit.observe(viewLifecycleOwner, Observer {
+            startActivity(Intent(activity, ProfileEditActivity::class.java))
         })
 
         return binding.root

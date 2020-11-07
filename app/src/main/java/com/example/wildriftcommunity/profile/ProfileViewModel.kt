@@ -18,7 +18,12 @@ class ProfileViewModel(private val profileRepository: ProfileRepository) : ViewM
 
     private val _userDetails = MutableLiveData<User>(User())
     val userDetails: LiveData<User>
-    get() = _userDetails
+        get() = _userDetails
+
+    private val _startProfileEdit = MutableLiveData<Boolean>()
+    val startProfileEdit: LiveData<Boolean>
+        get() = _startProfileEdit
+
 
     fun fetchUserDetail() {
         progressListener?.onStarted()
@@ -32,6 +37,16 @@ class ProfileViewModel(private val profileRepository: ProfileRepository) : ViewM
                 progressListener?.onFailure(it.message!!)
             })
         disposables.add(disposable)
+    }
+
+    fun goToProfileEdit(){
+        _startProfileEdit.value = true
+        _startProfileEdit.value = false
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        disposables.dispose()
     }
 
 }
