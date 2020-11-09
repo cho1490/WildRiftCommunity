@@ -80,6 +80,12 @@ class FirebaseSource {
                 }
         }
 
+    fun updateUserDetails() =
+        Completable.create { emitter ->
+            val userRef = db.collection("users")
+            userRef.document(currentUser()!!.uid)
+        }
+
     fun createPost(type: String, title: String, body: String, photoUri: Uri?) =
         Completable.create { emitter ->
             var user: User? = null

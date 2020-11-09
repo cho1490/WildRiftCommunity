@@ -20,10 +20,17 @@ class ProfileViewModel(private val profileRepository: ProfileRepository) : ViewM
     val userDetails: LiveData<User>
         get() = _userDetails
 
+    private val _startProfile = MutableLiveData<Boolean>()
+    val startProfile: LiveData<Boolean>
+        get() = _startProfile
+
     private val _startProfileEdit = MutableLiveData<Boolean>()
     val startProfileEdit: LiveData<Boolean>
         get() = _startProfileEdit
 
+    private var _startPickImage = MutableLiveData<Boolean>()
+    val startPickImage: LiveData<Boolean>
+        get() = _startPickImage
 
     fun fetchUserDetail() {
         progressListener?.onStarted()
@@ -42,6 +49,16 @@ class ProfileViewModel(private val profileRepository: ProfileRepository) : ViewM
     fun goToProfileEdit(){
         _startProfileEdit.value = true
         _startProfileEdit.value = false
+    }
+
+    fun goToPickImage(){
+        _startPickImage.value = true
+        _startPickImage.value = false
+    }
+
+    fun goToProfile(){
+        _startProfile.value = true
+        _startProfile.value = false
     }
 
     override fun onCleared() {

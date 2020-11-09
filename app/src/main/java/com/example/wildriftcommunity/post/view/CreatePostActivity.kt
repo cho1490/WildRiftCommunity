@@ -26,25 +26,24 @@ class CreatePostActivity : AppCompatActivity(), ProgressListener, KodeinAware {
 
     override val kodein by kodein()
     private val factory: PostViewModelFactory by instance()
-    private lateinit var viewModel : PostViewModel
+    private lateinit var postViewModel : PostViewModel
     private lateinit var binding : ActivityCreatePostBinding
 
     var photoUri : Uri? = null
-    private var PICK_IMAGE_FROM_ALBUM = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        viewModel = ViewModelProvider(this, factory).get(PostViewModel::class.java)
-        viewModel.progressListener = this
+        postViewModel = ViewModelProvider(this, factory).get(PostViewModel::class.java)
+        postViewModel.progressListener = this
 
         binding = DataBindingUtil.setContentView(this, R.layout.activity_create_post)
-        binding.postViewModel = viewModel
+        binding.postViewModel = postViewModel
         binding.lifecycleOwner = this
         var type: String = "Free"
 
-        viewModel.startCreatePost.observe(this, Observer{
+        postViewModel.startCreatePost.observe(this, Observer{
             if (it == true){
-                viewModel.setCreatePostValues(
+                postViewModel.setCreatePostValues(
                     type,
                     binding.postTitle.text.toString(),
                     binding.postBody.text.toString(),
@@ -53,11 +52,11 @@ class CreatePostActivity : AppCompatActivity(), ProgressListener, KodeinAware {
             }
         })
 
-        viewModel.startPickImage.observe(this, Observer {
+        postViewModel.startPickImage.observe(this, Observer {
             if (it == true){
                 var photoPickerIntent = Intent(Intent.ACTION_PICK)
                 photoPickerIntent.type = "image/*"
-                startActivityForResult(photoPickerIntent, PICK_IMAGE_FROM_ALBUM)
+                startActivityForResult(photoPickerIntent, 0)
             }
         })
 
@@ -83,7 +82,7 @@ class CreatePostActivity : AppCompatActivity(), ProgressListener, KodeinAware {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == PICK_IMAGE_FROM_ALBUM){
+        if (requestCode == 0){
             if(resultCode == Activity.RESULT_OK ){
                 photoUri = data?.data
                 binding.image.setImageURI(photoUri)
