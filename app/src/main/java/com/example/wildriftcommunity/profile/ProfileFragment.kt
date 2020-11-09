@@ -56,7 +56,7 @@ class ProfileFragment : Fragment(), KodeinAware, ProgressListener {
 
     override fun onStart() {
         super.onStart()
-        profileViewModel.fetchUserDetail()
+        profileViewModel.fetchUserDetails()
     }
 
     override fun onStarted() {

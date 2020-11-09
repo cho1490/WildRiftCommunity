@@ -80,10 +80,37 @@ class FirebaseSource {
                 }
         }
 
-    fun updateUserDetails() =
+    fun updateUserDetails(photoUri: Uri?, nickname: String, introduce: String) =
         Completable.create { emitter ->
             val userRef = db.collection("users")
-            userRef.document(currentUser()!!.uid)
+            var fieldUpdateMap = mutableMapOf<String, Any>()
+            if (photoUri != null) {
+                val timeStamp = SimpleDateFormat("yyyy-mm-dd_HH:mm:ss").format(Date())
+                val imageFileName = "Image_" + timeStamp + "_.png"
+                val storageRef = storage.child("images/").child(imageFileName)
+                storageRef.putFile(photoUri).continueWithTask {
+                    return@continueWithTask storageRef.downloadUrl
+                }.addOnSuccessListener { uri ->
+                    fieldUpdateMap["photoUri"] = uri
+                }
+            }
+            if (nickname != ""){
+                fieldUpdateMap["nickname"] = nickname
+            }
+
+            if (introduce != ""){
+                fieldUpdateMap["introduce"] = introduce
+            }
+
+            userRef.document(currentUser()!!.uid).update(fieldUpdateMap)
+                .addOnCompleteListener {
+                    if (!emitter.isDisposed) {
+                        if (it.isSuccessful) {
+                            emitter.onComplete()
+                        } else
+                            emitter.onError(it.exception!!)
+                    }
+                }
         }
 
     fun createPost(type: String, title: String, body: String, photoUri: Uri?) =

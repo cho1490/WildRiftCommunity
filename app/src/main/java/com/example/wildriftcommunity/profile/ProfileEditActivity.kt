@@ -15,7 +15,6 @@ import com.example.wildriftcommunity.ProgressListener
 import com.example.wildriftcommunity.R
 import com.example.wildriftcommunity.databinding.ActivityProfileEditBinding
 import kotlinx.android.synthetic.main.activity_profile_edit.*
-import kotlinx.android.synthetic.main.profile_fragment.*
 import org.kodein.di.KodeinAware
 import org.kodein.di.android.kodein
 import org.kodein.di.generic.instance
@@ -38,13 +37,23 @@ class ProfileEditActivity : AppCompatActivity(), ProgressListener, KodeinAware {
         binding.profileViewModel = profileViewModel
         binding.lifecycleOwner = this
 
-        profileViewModel.fetchUserDetail()
+        profileViewModel.fetchUserDetails()
 
         profileViewModel.userDetails.observe(this, Observer {
             binding.apply {
                 Glide.with(this.root).load(it.photoUri).into(profileImage)
                 currentNickname.text = it.nickname
                 currentIntro.text = it.introduce
+            }
+        })
+
+        profileViewModel.startUpdate.observe(this, Observer {
+            if (it == true){
+                    profileViewModel.setUpdateUserDetails(
+                        photoUri,
+                        binding.changeNickname.text.toString(),
+                        binding.changeIntro.text.toString()
+                    )
             }
         })
 
@@ -61,6 +70,8 @@ class ProfileEditActivity : AppCompatActivity(), ProgressListener, KodeinAware {
                 finish()
             }
         })
+
+
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
