@@ -6,10 +6,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.example.wildriftcommunity.ProgressListener
 import com.example.wildriftcommunity.R
 import com.example.wildriftcommunity.data.models.Post
@@ -28,7 +29,9 @@ class PostFragment : Fragment(), ProgressListener, KodeinAware {
     private val factory: PostViewModelFactory by instance()
     lateinit var postList: List<Post>
 
-    var postType: String = "Free"
+    private var _postType = MutableLiveData<String>()
+    val postType: LiveData<String>
+        get() = _postType
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -49,12 +52,24 @@ class PostFragment : Fragment(), ProgressListener, KodeinAware {
             }
         })
 
+        postType.observe(viewLifecycleOwner, Observer {
+            postViewModel.setPostList(postType.value.toString())
+        })
+
         return view
     }
 
     override fun onStart() {
         super.onStart()
-        postViewModel.setPostList(postType)
+        _postType.value = "Free"
+        postViewModel.setPostList(postType.value.toString())
+
+        btn_postFragmentFree.setOnClickListener {
+            _postType.value = "Free"
+        }
+        btn_postFragmentDuo.setOnClickListener {
+            _postType.value = "Duo"
+        }
     }
 
     override fun onStarted() {
