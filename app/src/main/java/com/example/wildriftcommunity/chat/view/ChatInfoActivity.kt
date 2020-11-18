@@ -1,4 +1,4 @@
-package com.example.wildriftcommunity.chat
+package com.example.wildriftcommunity.chat.view
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle

@@ -7,7 +7,7 @@
     <data>
         <variable
             name="chatViewModel"
-            type="com.example.wildriftcommunity.chat.ChatViewModel" />
+            type="com.example.wildriftcommunity.chat.viewmodel.ChatViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

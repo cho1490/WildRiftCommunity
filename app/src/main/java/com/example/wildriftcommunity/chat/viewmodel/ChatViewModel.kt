@@ -1,4 +1,4 @@
-package com.example.wildriftcommunity.chat
+package com.example.wildriftcommunity.chat.viewmodel
 
 import androidx.lifecycle.ViewModel
 

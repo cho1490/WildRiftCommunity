@@ -5,7 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import com.example.wildriftcommunity.R
-import com.example.wildriftcommunity.chat.ChatFragment
+import com.example.wildriftcommunity.chat.view.ChatFragment
 import com.example.wildriftcommunity.notice.NoticeFragment
 import com.example.wildriftcommunity.post.view.CreatePostActivity
 import com.example.wildriftcommunity.post.view.PostFragment
