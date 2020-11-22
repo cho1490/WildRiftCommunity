@@ -157,7 +157,7 @@ class FirebaseSource {
     fun setPostList(type: String) =
         Completable.create { emitter ->
             val postsRef = db.collection("posts")
-            postsRef.whereEqualTo("type", type).orderBy("timestamp", Query.Direction.ASCENDING).get()
+            postsRef.whereEqualTo("type", type).orderBy("timestamp", Query.Direction.DESCENDING).get()
                 .addOnCompleteListener {
                     if (!emitter.isDisposed) {
                         if (it.isSuccessful) {

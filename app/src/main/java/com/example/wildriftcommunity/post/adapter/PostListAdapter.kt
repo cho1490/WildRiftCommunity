@@ -41,8 +41,8 @@ class PostListAdapter(private val list: List<Post>): RecyclerView.Adapter<PostLi
 
         fun bind(item: Post){
             itemView.apply {
-                Glide.with(this).load(item.userInfo!!.photoUri).into(iv_postListItemProfileImage) // profileImage
-                tv_postListItemNickname.text = item.userInfo!!.nickname // nickname
+                //Glide.with(this).load(item.userInfo!!.photoUri).into(iv_postListItemProfileImage) // profileImage
+                //tv_postListItemNickname.text = item.userInfo!!.nickname // nickname
                 tv_postListItemTime.text = item.timestamp.toString() // timeStamp
                 tv_postListItemTitle.text = item.title // title
                 tv_postListItemBody.text = item.body // body
