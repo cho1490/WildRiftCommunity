@@ -25,7 +25,6 @@ class FirebaseSource {
 
     lateinit var userDetails: User
     var postList = ArrayList<Post>()
-    var postInUserList = ArrayList<User>()
 
     fun currentUser() = auth.currentUser
 
@@ -164,11 +163,11 @@ class FirebaseSource {
                             postList.clear()
                             for (snapshot in it.result!!) {
                                 val postItem = snapshot.toObject(Post::class.java)
-                                postList.add(postItem)
-                                val userItem = db.collection("users")
+                                val userObject = db.collection("users")
                                     .document(postItem.userUid!!)
                                     .get().result!!.toObject(User::class.java)
-                                postInUserList.add(userItem!!)
+                                postItem.userObject = userObject
+                                postList.add(postItem)
                             }
                             emitter.onComplete()
                         } else

@@ -30,7 +30,7 @@ class PostFragment : Fragment(), ProgressListener, KodeinAware {
     lateinit var postList: List<Post>
 
     private var _postType = MutableLiveData<String>()
-    val postType: LiveData<String>
+    private val postType: LiveData<String>
         get() = _postType
 
     override fun onCreateView(
