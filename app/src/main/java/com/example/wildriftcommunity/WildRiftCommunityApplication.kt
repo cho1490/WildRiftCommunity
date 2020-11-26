@@ -3,6 +3,8 @@ package com.example.wildriftcommunity
 import android.app.Application
 import com.example.wildriftcommunity.data.repositories.AuthRepository
 import com.example.wildriftcommunity.auth.AuthViewModelFactory
+import com.example.wildriftcommunity.chat.viewmodel.ChatViewModelFactory
+import com.example.wildriftcommunity.data.repositories.ChatRepository
 import com.example.wildriftcommunity.data.repositories.PostRepository
 import com.example.wildriftcommunity.data.repositories.ProfileRepository
 import com.example.wildriftcommunity.post.viewmodel.PostViewModelFactory
@@ -25,11 +27,12 @@ class WildRiftCommunityApplication : Application(), KodeinAware {
         bind() from singleton { AuthRepository( instance()) }
         bind() from singleton { PostRepository( instance()) }
         bind() from singleton { ProfileRepository( instance()) }
+        bind() from singleton { ChatRepository( instance()) }
 
         bind() from provider { AuthViewModelFactory( instance()) }
         bind() from provider { PostViewModelFactory( instance()) }
         bind() from provider { ProfileViewModelFactory( instance()) }
-
+        bind() from provider { ChatViewModelFactory( instance()) }
     }
 
 }

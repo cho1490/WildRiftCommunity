@@ -156,17 +156,19 @@ class FirebaseSource {
     fun setPostList(type: String) =
         Completable.create { emitter ->
             val postsRef = db.collection("posts")
-            postsRef.whereEqualTo("type", type).orderBy("timestamp", Query.Direction.DESCENDING).get()
+            postsRef.whereEqualTo("type", type).orderBy("timestamp", Query.Direction.ASCENDING).get()
                 .addOnCompleteListener {
                     if (!emitter.isDisposed) {
                         if (it.isSuccessful) {
                             postList.clear()
                             for (snapshot in it.result!!) {
                                 val postItem = snapshot.toObject(Post::class.java)
-                                val userObject = db.collection("users")
-                                    .document(postItem.userUid!!)
-                                    .get().result!!.toObject(User::class.java)
-                                postItem.userObject = userObject
+                                var userObject: User? = null
+                                db.collection("users").document(postItem.userUid!!).get().addOnSuccessListener { ds ->
+                                    //userObject = ds.toObject(User::class.java) 이 쪽 수정해야햔다.
+                                    println("csh : " + ds.toObject(User::class.java)!!.photoUri)
+                                }
+                                postItem.userObject = User()
                                 postList.add(postItem)
                             }
                             emitter.onComplete()
