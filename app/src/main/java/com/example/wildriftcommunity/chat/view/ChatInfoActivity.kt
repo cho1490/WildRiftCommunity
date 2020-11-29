@@ -15,7 +15,7 @@ import org.kodein.di.android.kodein
 import org.kodein.di.generic.instance
 
 class ChatInfoActivity : AppCompatActivity(), ProgressListener, KodeinAware {
-
+    //mcxncSzaKoOgYq2Rfc9JEVHqCSI3 chosanghyun7
     override val kodein by kodein()
     private val factory: ChatViewModelFactory by instance()
     private lateinit var chatViewModel: ChatViewModel
@@ -43,4 +43,5 @@ class ChatInfoActivity : AppCompatActivity(), ProgressListener, KodeinAware {
     override fun onFailure(message: String) {
         binding.progressbarChatInfo.visibility = View.GONE
     }
+
 }

@@ -1,11 +1,11 @@
 package com.example.wildriftcommunity.util
 
 import android.net.Uri
+import com.example.wildriftcommunity.data.models.Chat
 import com.example.wildriftcommunity.data.models.Post
 import com.example.wildriftcommunity.data.models.User
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.DatabaseReference
-import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.*
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import com.google.firebase.storage.FirebaseStorage
@@ -178,8 +178,40 @@ class FirebaseSource {
                 }
         }
 
-    fun sendMessage(user: User, message: String) {
-        realtimeDb.child("users").child(currentUser()!!.uid)
+    private fun checkChatRoom(destinationUid: String): String? {
+        var chatRoomUid: String? = null
+        realtimeDb.child("chatRooms").orderByChild("users/" + currentUser()!!.uid).equalTo(true).addListenerForSingleValueEvent(object: ValueEventListener{
+            override fun onCancelled(error: DatabaseError) {
+            }
+            override fun onDataChange(snapshot: DataSnapshot) {
+                var chat: Chat? = null
+                for(item in snapshot.children){
+                    chat = item.getValue(Chat::class.java)
+                    if(chat!!.users!!.contains(destinationUid))
+                        chatRoomUid = item.key
+                }
+            }
+        })
+        return chatRoomUid
+    }
+
+    fun createChatRoom(destinationUid: String, message: String){
+        val chatRoomId = checkChatRoom(destinationUid)//계속 메소드 불러줘야함
+        if(chatRoomId == null){
+            val chat = Chat()
+            chat.users!![currentUser()!!.uid] = true
+            chat.users[destinationUid] = true
+            realtimeDb.child("chatRooms").push().setValue(chat)
+        }else {
+            var chatComment = Chat.Comment()
+            chatComment.uid = currentUser()!!.uid
+            chatComment.message = message
+            realtimeDb.child("chatRooms").child(chatRoomId).child("comments").push().setValue()
+        }
+    }
+
+    fun sendMessage(message: String) {
+
     }
 
 }

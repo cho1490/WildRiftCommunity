@@ -38,7 +38,6 @@ class PostListAdapter(private val list: List<Post>): RecyclerView.Adapter<PostLi
 
     class ViewHolder(itemView: View): RecyclerView.ViewHolder(itemView){
 
-
         fun bind(item: Post){
             itemView.apply {
                 Glide.with(this).load(item.userObject!!.photoUri).into(iv_postListItemProfileImage) // profileImage
