@@ -26,6 +26,8 @@ class FirebaseSource {
     lateinit var userDetails: User
     var postList = ArrayList<Post>()
 
+    var chatRoomId: String? = null
+
     fun currentUser() = auth.currentUser
 
     fun login(email: String, password: String) =
@@ -178,37 +180,35 @@ class FirebaseSource {
                 }
         }
 
-    private fun checkChatRoom(destinationUid: String): String? {
-        var chatRoomUid: String? = null
-        realtimeDb.child("chatRooms").orderByChild("users/" + currentUser()!!.uid).equalTo(true).addListenerForSingleValueEvent(object: ValueEventListener{
-            override fun onCancelled(error: DatabaseError) {
-            }
-            override fun onDataChange(snapshot: DataSnapshot) {
-                var chat: Chat? = null
-                for(item in snapshot.children){
-                    chat = item.getValue(Chat::class.java)
-                    if(chat!!.users!!.contains(destinationUid))
-                        chatRoomUid = item.key
+    fun findRoomId() =
+        Completable.create {emitter ->
+            realtimeDb.child("chatRooms").orderByChild("users/" + currentUser()!!.uid).equalTo(true).addListenerForSingleValueEvent(object: ValueEventListener{
+                override fun onCancelled(error: DatabaseError) {
+                }
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    var chat: Chat? = null
+                    for(item in snapshot.children){
+                        chat = item.getValue(Chat::class.java)
+                        if(chat!!.users!!.contains("destinationUid"))
+                            chatRoomId = item.key
+                    }
+                }
+            })
+        }
+
+    fun checkChatRoom(destinationUid: String) =
+        Completable.create { emitter ->
+            if (chatRoomId == null) {
+                val chat = Chat()
+                chat.users!![currentUser()!!.uid] = true
+                chat.users[destinationUid] = true
+                realtimeDb.child("chatRooms").push().setValue(chat).addOnSuccessListener {
+                    emitter.onComplete()
+                }.addOnCanceledListener {
+
                 }
             }
-        })
-        return chatRoomUid
-    }
-
-    fun createChatRoom(destinationUid: String, message: String){
-        val chatRoomId = checkChatRoom(destinationUid)//계속 메소드 불러줘야함
-        if(chatRoomId == null){
-            val chat = Chat()
-            chat.users!![currentUser()!!.uid] = true
-            chat.users[destinationUid] = true
-            realtimeDb.child("chatRooms").push().setValue(chat)
-        }else {
-            var chatComment = Chat.Comment()
-            chatComment.uid = currentUser()!!.uid
-            chatComment.message = message
-            realtimeDb.child("chatRooms").child(chatRoomId).child("comments").push().setValue()
         }
-    }
 
     fun sendMessage(message: String) {
 

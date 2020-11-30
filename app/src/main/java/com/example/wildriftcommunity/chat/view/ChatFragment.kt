@@ -37,7 +37,7 @@ class ChatFragment : Fragment(), ProgressListener, KodeinAware {
         chatViewModel.progressListener = this
 
         binding.button.setOnClickListener {
-            startActivity(Intent(activity, ChatInfoActivity::class.java))
+            startActivity(Intent(activity, ChatInfoActivity::class.java).apply { putExtra("destinationUid", "mcxncSzaKoOgYq2Rfc9JEVHqCSI3") })
         }
 
         return binding.root

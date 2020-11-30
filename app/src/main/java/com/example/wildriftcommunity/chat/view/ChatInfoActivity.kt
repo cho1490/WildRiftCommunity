@@ -3,6 +3,7 @@ package com.example.wildriftcommunity.chat.view
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import com.example.wildriftcommunity.ProgressListener
@@ -15,7 +16,7 @@ import org.kodein.di.android.kodein
 import org.kodein.di.generic.instance
 
 class ChatInfoActivity : AppCompatActivity(), ProgressListener, KodeinAware {
-    //mcxncSzaKoOgYq2Rfc9JEVHqCSI3 chosanghyun7
+
     override val kodein by kodein()
     private val factory: ChatViewModelFactory by instance()
     private lateinit var chatViewModel: ChatViewModel
@@ -30,6 +31,9 @@ class ChatInfoActivity : AppCompatActivity(), ProgressListener, KodeinAware {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_chat_info)
         binding.chatViewModel = chatViewModel
         binding.lifecycleOwner = this
+
+        val destinationUid = intent.getStringExtra("destinationUid")
+        chatViewModel.checkChatRoom(destinationUid!!)
     }
 
     override fun onStarted() {
@@ -42,6 +46,7 @@ class ChatInfoActivity : AppCompatActivity(), ProgressListener, KodeinAware {
 
     override fun onFailure(message: String) {
         binding.progressbarChatInfo.visibility = View.GONE
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
     }
 
 }
