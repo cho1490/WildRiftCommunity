@@ -5,7 +5,7 @@ data class Chat(
     val comments: MutableMap<String, Comment> = mutableMapOf()
 ){
     data class Comment(
-        var uid: String? = null,
-        var message: String? = null
+        var uid: String = "",
+        var message: String = ""
     )
 }

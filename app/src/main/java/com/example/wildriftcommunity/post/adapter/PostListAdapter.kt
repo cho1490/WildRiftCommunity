@@ -1,7 +1,6 @@
 package com.example.wildriftcommunity.post.adapter
 
 import android.content.Intent
-import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,7 +11,6 @@ import com.example.wildriftcommunity.R
 import com.example.wildriftcommunity.data.models.Post
 import com.example.wildriftcommunity.post.view.PostInfoActivity
 import kotlinx.android.synthetic.main.post_list_item.view.*
-import java.io.Serializable
 
 class PostListAdapter(private val list: List<Post>): RecyclerView.Adapter<PostListAdapter.ViewHolder>(){
 
@@ -48,6 +46,7 @@ class PostListAdapter(private val list: List<Post>): RecyclerView.Adapter<PostLi
                 Glide.with(this).load(item.imageUrl).into(iv_postListItemBodyImage) // photo
             }
         }
+
     }
 
 }

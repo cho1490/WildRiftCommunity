@@ -1,6 +1,8 @@
 package com.example.wildriftcommunity.util
 
 import android.net.Uri
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import com.example.wildriftcommunity.data.models.Chat
 import com.example.wildriftcommunity.data.models.Post
 import com.example.wildriftcommunity.data.models.User
@@ -25,6 +27,10 @@ class FirebaseSource {
 
     lateinit var userDetails: User
     var postList = ArrayList<Post>()
+
+    private var _messageList = MutableLiveData<Chat>()
+    val messageList: LiveData<Chat>
+        get() = _messageList
 
     var chatRoomId: String? = null
 
@@ -182,7 +188,7 @@ class FirebaseSource {
 
     fun findRoomId(destinationUid: String) =
         Completable.create { emitter ->
-            val postListener = object : ValueEventListener {
+            val chatRoomIDListener = object : ValueEventListener {
                 override fun onDataChange(dataSnapshot: DataSnapshot) {
                     var chat: Chat?
                     for(item in dataSnapshot.children){
@@ -199,7 +205,7 @@ class FirebaseSource {
                 }
             }
 
-            realtimeDb.child("chatRooms").orderByChild("users/" + currentUser()!!.uid).equalTo(true).addListenerForSingleValueEvent(postListener)
+            realtimeDb.child("chatRooms").orderByChild("users/" + currentUser()!!.uid).equalTo(true).addListenerForSingleValueEvent(chatRoomIDListener)
         }
 
     fun createChatRoom(destinationUid: String) =
@@ -219,8 +225,54 @@ class FirebaseSource {
             }
         }
 
-    fun sendMessage(message: String) {
+    fun setMessage(chatRoomID: String) =
+        Completable.create { emitter ->
+            val messageListListener = object : ValueEventListener {
+                override fun onDataChange(dataSnapshot: DataSnapshot) {
+                    var comment: Chat.Comment
+                    for(item in dataSnapshot.children){
+                        comment = item.getValue(Chat.Comment::class.java)!!
+                        println("csh " + comment.message)
+                       // _messageList.value!!.comments[item.key!!] = comment
+                    }
+                    emitter.onComplete()
+                }
 
-    }
+                override fun onCancelled(databaseError: DatabaseError) {
+                    emitter.onError(databaseError.toException())
+                }
+            }
+
+            val userListener = object : ValueEventListener {
+                override fun onDataChange(dataSnapshot: DataSnapshot) {
+                    for(item in dataSnapshot.children) {
+                        println("csh " + item.key)
+                        //_messageList.value!!.users[item.key!!] = true
+                    }
+                    emitter.onComplete()
+                }
+
+                override fun onCancelled(databaseError: DatabaseError) {
+                    emitter.onError(databaseError.toException())
+                }
+            }
+
+            realtimeDb.child("chatRooms").child(chatRoomID).child("comments").addListenerForSingleValueEvent(messageListListener)
+            realtimeDb.child("chatRooms").child(chatRoomID).child("users").addListenerForSingleValueEvent(userListener)
+        }
+
+    fun sendMessage(chatRoomID: String, message: String) =
+        Completable.create { emitter ->
+            val comment = Chat.Comment()
+            comment.uid = currentUser()!!.uid
+            comment.message = message
+            realtimeDb.child("chatRooms").child(chatRoomID).child("comments").push().setValue(comment)
+                .addOnSuccessListener {
+                    emitter.onComplete()
+                }
+                .addOnFailureListener {
+                    emitter.onError(it)
+                }
+        }
 
 }

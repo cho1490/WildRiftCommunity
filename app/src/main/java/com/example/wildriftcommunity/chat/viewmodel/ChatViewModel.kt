@@ -21,7 +21,6 @@ class ChatViewModel(private val chatRepository: ChatRepository) : ViewModel() {
     fun getChatRoomId() = chatRepository.getChatRoomId()
 
     fun findRoomId(destinationUid: String) {
-        println("csh : viewmodel  1")
         progressListener?.onStarted()
         val disposable = chatRepository.findRoomId(destinationUid)
             .subscribeOn(Schedulers.io())
@@ -53,6 +52,34 @@ class ChatViewModel(private val chatRepository: ChatRepository) : ViewModel() {
                 progressListener?.onFailure("채팅방 생성 에러")
             })
         disposables.add(disposable)
+    }
+
+    fun setMessage(chatRoomID: String){
+        progressListener?.onStarted()
+        val disposable = chatRepository.setMessage(chatRoomID)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe({
+                _startChatInfo.value = true
+                progressListener?.onSuccess("")
+            }, {
+                progressListener?.onFailure("초기화 에러")
+            })
+        disposables.add(disposable)
+    }
+
+    fun getMessage() = chatRepository.getMessage()
+
+    fun sendMessage(chatRoomID: String, message: String) {
+        progressListener?.onStarted()
+        val disposable = chatRepository.sendMessage(chatRoomID, message)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe({
+                progressListener?.onSuccess("")
+            },{
+                progressListener?.onFailure("메시지 입력 에러")
+            })
     }
 
 }

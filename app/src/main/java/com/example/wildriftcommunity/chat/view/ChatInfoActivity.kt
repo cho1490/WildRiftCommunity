@@ -5,15 +5,20 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.wildriftcommunity.ProgressListener
 import com.example.wildriftcommunity.R
+import com.example.wildriftcommunity.chat.adapter.MessageRecyclerView
 import com.example.wildriftcommunity.chat.viewmodel.ChatViewModel
 import com.example.wildriftcommunity.chat.viewmodel.ChatViewModelFactory
+import com.example.wildriftcommunity.data.models.Chat
 import com.example.wildriftcommunity.databinding.ActivityChatInfoBinding
 import org.kodein.di.KodeinAware
 import org.kodein.di.android.kodein
 import org.kodein.di.generic.instance
+
 
 class ChatInfoActivity : AppCompatActivity(), ProgressListener, KodeinAware {
 
@@ -33,7 +38,23 @@ class ChatInfoActivity : AppCompatActivity(), ProgressListener, KodeinAware {
         binding.lifecycleOwner = this
 
         val roomID = intent.getStringExtra("roomID")
+        chatViewModel.setMessage(roomID!!)
 
+        binding.sendMessage.setOnClickListener {
+            chatViewModel.sendMessage(roomID, binding.sendMessageBody.text.toString())
+        }
+
+        chatViewModel.getMessage().observe(this, Observer {
+            var list: ArrayList<Chat.Comment> = arrayListOf()
+            for( (k, v) in it.comments){
+                list.add(v)
+            }
+            binding.messageRecyclerView.apply {
+                layoutManager = LinearLayoutManager(this@ChatInfoActivity, LinearLayoutManager.VERTICAL, false)
+                setHasFixedSize(true)
+                adapter = MessageRecyclerView(list)
+            }
+        })
 
     }
 
