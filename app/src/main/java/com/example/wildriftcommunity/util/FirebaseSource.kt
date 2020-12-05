@@ -14,7 +14,6 @@ import io.reactivex.Completable
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
-import kotlin.collections.HashMap
 
 class FirebaseSource {
 
@@ -168,7 +167,7 @@ class FirebaseSource {
                                 var userObject: User? = null
                                 db.collection("users").document(postItem.userUid!!).get().addOnSuccessListener { ds ->
                                     //userObject = ds.toObject(User::class.java) 이 쪽 수정해야햔다.
-                                    println("csh : " + ds.toObject(User::class.java)!!.photoUri)
+                                    //println("csh : " + ds.toObject(User::class.java)!!.photoUri) 사진 uri ㅇ
                                 }
                                 postItem.userObject = User()
                                 postList.add(postItem)
@@ -180,7 +179,7 @@ class FirebaseSource {
                 }
         }
 
-    fun findRoomId() =
+    fun findRoomId(destinationUid: String) =
         Completable.create {emitter ->
             realtimeDb.child("chatRooms").orderByChild("users/" + currentUser()!!.uid).equalTo(true).addListenerForSingleValueEvent(object: ValueEventListener{
                 override fun onCancelled(error: DatabaseError) {
@@ -196,7 +195,7 @@ class FirebaseSource {
             })
         }
 
-    fun checkChatRoom(destinationUid: String) =
+    fun createChatRoom(destinationUid: String) =
         Completable.create { emitter ->
             if (chatRoomId == null) {
                 val chat = Chat()
@@ -204,10 +203,9 @@ class FirebaseSource {
                 chat.users[destinationUid] = true
                 realtimeDb.child("chatRooms").push().setValue(chat).addOnSuccessListener {
                     emitter.onComplete()
-                }.addOnCanceledListener {
-
                 }
             }
+            chatRoomId = null
         }
 
     fun sendMessage(message: String) {

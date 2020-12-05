@@ -14,19 +14,42 @@ class ChatViewModel(private val chatRepository: ChatRepository) : ViewModel() {
     private val disposables = CompositeDisposable()
     var progressListener : ProgressListener? = null
 
-//    private var _startCheckChatRoom = MutableLiveData<String>()
- //   val startCheckChatRoom: LiveData<String>
-  //      get() = _startCheckChatRoom
+    private var _startChatInfo = MutableLiveData<Boolean>()
+    val startChatInfo: LiveData<Boolean>
+        get() = _startChatInfo
 
-    fun checkChatRoom(destinationUid: String) {
+
+    fun getChatRoomId() = chatRepository.getChatRoomId()
+
+    fun findRoomId(destinationUid: String) {
         progressListener?.onStarted()
-        val disposable = chatRepository.checkChatRoom(destinationUid)
+        val disposable = chatRepository.findRoomId(destinationUid)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe({
+                if(getChatRoomId() == null){
+                    _startChatInfo.value = false
+                    progressListener?.onSuccess("null")
+                }else{
+                    _startChatInfo.value = true
+                    progressListener?.onSuccess("not null")
+                }
+            },{
+                progressListener?.onFailure("àáâäæãåā")
+            })
+        disposables.add(disposable)
+    }
+
+    fun createChatRoom(destinationUid: String){
+        progressListener?.onStarted()
+        val disposable = chatRepository.createChatRoom(destinationUid)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({
                 progressListener?.onSuccess("")
+                _startChatInfo.value = true
             }, {
-                progressListener?.onFailure(it.message!!)
+                progressListener?.onFailure("žźż")
             })
         disposables.add(disposable)
     }

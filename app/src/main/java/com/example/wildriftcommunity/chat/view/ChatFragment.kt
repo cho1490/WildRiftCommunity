@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.example.wildriftcommunity.ProgressListener
 import com.example.wildriftcommunity.R
@@ -37,8 +38,17 @@ class ChatFragment : Fragment(), ProgressListener, KodeinAware {
         chatViewModel.progressListener = this
 
         binding.button.setOnClickListener {
-            startActivity(Intent(activity, ChatInfoActivity::class.java).apply { putExtra("destinationUid", "mcxncSzaKoOgYq2Rfc9JEVHqCSI3") })
+            chatViewModel.findRoomId("mcxncSzaKoOgYq2Rfc9JEVHqCSI3")
         }
+
+        chatViewModel.startChatInfo.observe(viewLifecycleOwner, Observer {
+            if(it){
+                startActivity(Intent(activity, ChatInfoActivity::class.java))
+            }else{
+                chatViewModel.createChatRoom("mcxncSzaKoOgYq2Rfc9JEVHqCSI3")
+            }
+        })
+
 
         return binding.root
     }
@@ -49,6 +59,7 @@ class ChatFragment : Fragment(), ProgressListener, KodeinAware {
 
     override fun onSuccess(message: String) {
         progressbarChat.visibility = View.GONE
+        Toast.makeText(activity, message, Toast.LENGTH_SHORT).show()
     }
 
     override fun onFailure(message: String) {

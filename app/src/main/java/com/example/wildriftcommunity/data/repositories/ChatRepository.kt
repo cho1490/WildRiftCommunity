@@ -4,6 +4,11 @@ import com.example.wildriftcommunity.util.FirebaseSource
 
 class ChatRepository(private val firebase: FirebaseSource){
 
-    fun checkChatRoom(destinationUid: String) = firebase.checkChatRoom(destinationUid)
+
+    fun getChatRoomId() = firebase.chatRoomId
+
+    fun findRoomId(destinationUid: String) = firebase.findRoomId(destinationUid)
+
+    fun createChatRoom(destinationUid: String) = firebase.createChatRoom(destinationUid)
 
 }
