@@ -38,17 +38,16 @@ class ChatFragment : Fragment(), ProgressListener, KodeinAware {
         chatViewModel.progressListener = this
 
         binding.button.setOnClickListener {
-            chatViewModel.findRoomId("mcxncSzaKoOgYq2Rfc9JEVHqCSI3")
+           chatViewModel.findRoomId("mcxncSzaKoOgYq2Rfc9JEVHqCSI3")
         }
 
         chatViewModel.startChatInfo.observe(viewLifecycleOwner, Observer {
             if(it){
-                startActivity(Intent(activity, ChatInfoActivity::class.java))
+                startActivity(Intent(activity, ChatInfoActivity::class.java).apply { putExtra("roomID", chatViewModel.getChatRoomId()) })
             }else{
                 chatViewModel.createChatRoom("mcxncSzaKoOgYq2Rfc9JEVHqCSI3")
             }
         })
-
 
         return binding.root
     }

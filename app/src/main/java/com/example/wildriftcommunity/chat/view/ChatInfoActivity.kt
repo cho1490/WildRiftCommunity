@@ -32,8 +32,8 @@ class ChatInfoActivity : AppCompatActivity(), ProgressListener, KodeinAware {
         binding.chatViewModel = chatViewModel
         binding.lifecycleOwner = this
 
-        //val destinationUid = intent.getStringExtra("destinationUid")
-        //chatViewModel.checkChatRoom(destinationUid!!)
+        val roomID = intent.getStringExtra("roomID")
+
 
     }
 

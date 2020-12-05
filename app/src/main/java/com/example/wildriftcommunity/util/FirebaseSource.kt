@@ -11,6 +11,7 @@ import com.google.firebase.firestore.Query
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import io.reactivex.Completable
+import java.lang.Error
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
@@ -180,32 +181,42 @@ class FirebaseSource {
         }
 
     fun findRoomId(destinationUid: String) =
-        Completable.create {emitter ->
-            realtimeDb.child("chatRooms").orderByChild("users/" + currentUser()!!.uid).equalTo(true).addListenerForSingleValueEvent(object: ValueEventListener{
-                override fun onCancelled(error: DatabaseError) {
-                }
-                override fun onDataChange(snapshot: DataSnapshot) {
-                    var chat: Chat? = null
-                    for(item in snapshot.children){
+        Completable.create { emitter ->
+            val postListener = object : ValueEventListener {
+                override fun onDataChange(dataSnapshot: DataSnapshot) {
+                    var chat: Chat?
+                    for(item in dataSnapshot.children){
                         chat = item.getValue(Chat::class.java)
-                        if(chat!!.users!!.contains("destinationUid"))
+                        if(chat!!.users.contains(destinationUid)){
                             chatRoomId = item.key
+                            emitter.onComplete()
+                        }
                     }
                 }
-            })
+
+                override fun onCancelled(databaseError: DatabaseError) {
+                    emitter.onError(databaseError.toException())
+                }
+            }
+
+            realtimeDb.child("chatRooms").orderByChild("users/" + currentUser()!!.uid).equalTo(true).addListenerForSingleValueEvent(postListener)
         }
 
     fun createChatRoom(destinationUid: String) =
         Completable.create { emitter ->
             if (chatRoomId == null) {
                 val chat = Chat()
-                chat.users!![currentUser()!!.uid] = true
+                chat.users[currentUser()!!.uid] = true
                 chat.users[destinationUid] = true
-                realtimeDb.child("chatRooms").push().setValue(chat).addOnSuccessListener {
-                    emitter.onComplete()
+                realtimeDb.child("chatRooms").push().setValue(chat)
+                    .addOnSuccessListener {
+                        chatRoomId = null
+                        emitter.onComplete()
                 }
+                    .addOnFailureListener {
+                        emitter.onError(it)
+                    }
             }
-            chatRoomId = null
         }
 
     fun sendMessage(message: String) {
