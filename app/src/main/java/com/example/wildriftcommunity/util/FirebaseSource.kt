@@ -13,7 +13,6 @@ import com.google.firebase.firestore.Query
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import io.reactivex.Completable
-import java.lang.Error
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
@@ -25,14 +24,16 @@ class FirebaseSource {
     private val storage: StorageReference by lazy { FirebaseStorage.getInstance().reference }
     private val realtimeDb: DatabaseReference by lazy { FirebaseDatabase.getInstance().reference }
 
-    lateinit var userDetails: User
+    lateinit var userInfoInProfile: User
     var postList = ArrayList<Post>()
 
-    private var _messageList = MutableLiveData<Chat>()
-    val messageList: LiveData<Chat>
+    var chatRoomId: String? = null
+
+    private var _messageList: MutableLiveData<MutableList<Chat.Comment>> = MutableLiveData(mutableListOf())
+    val messageList: MutableLiveData<MutableList<Chat.Comment>>
         get() = _messageList
 
-    var chatRoomId: String? = null
+    var userInfoInChatRoom: User? = null
 
     fun currentUser() = auth.currentUser
 
@@ -84,7 +85,7 @@ class FirebaseSource {
                 .addOnCompleteListener {
                     if (!emitter.isDisposed) {
                         if (it.isSuccessful) {
-                            userDetails = it.result?.toObject(User::class.java)!!
+                            userInfoInProfile = it.result?.toObject(User::class.java)!!
                         }
                         emitter.onComplete()
                     } else
@@ -227,27 +228,15 @@ class FirebaseSource {
 
     fun setMessage(chatRoomID: String) =
         Completable.create { emitter ->
-            val messageListListener = object : ValueEventListener {
-                override fun onDataChange(dataSnapshot: DataSnapshot) {
-                    var comment: Chat.Comment
-                    for(item in dataSnapshot.children){
-                        comment = item.getValue(Chat.Comment::class.java)!!
-                        println("csh " + comment.message)
-                       // _messageList.value!!.comments[item.key!!] = comment
-                    }
-                    emitter.onComplete()
-                }
 
-                override fun onCancelled(databaseError: DatabaseError) {
-                    emitter.onError(databaseError.toException())
-                }
-            }
 
             val userListener = object : ValueEventListener {
                 override fun onDataChange(dataSnapshot: DataSnapshot) {
                     for(item in dataSnapshot.children) {
-                        println("csh " + item.key)
-                        //_messageList.value!!.users[item.key!!] = true
+                        if(item.toString() == currentUser()!!.uid)
+                            continue
+                        //println("csh : " + item.key)
+                        //db.collection("users")
                     }
                     emitter.onComplete()
                 }
@@ -257,8 +246,8 @@ class FirebaseSource {
                 }
             }
 
-            realtimeDb.child("chatRooms").child(chatRoomID).child("comments").addListenerForSingleValueEvent(messageListListener)
             realtimeDb.child("chatRooms").child(chatRoomID).child("users").addListenerForSingleValueEvent(userListener)
+
         }
 
     fun sendMessage(chatRoomID: String, message: String) =

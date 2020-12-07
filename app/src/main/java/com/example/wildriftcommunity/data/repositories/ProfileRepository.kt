@@ -5,7 +5,7 @@ import com.example.wildriftcommunity.util.FirebaseSource
 
 class ProfileRepository (private val firebase: FirebaseSource) {
 
-    fun currentUserDetails() = firebase.userDetails
+    fun currentUserDetails() = firebase.userInfoInProfile
 
     fun fetchUserDetails() = firebase.fetchUserDetails()
 
