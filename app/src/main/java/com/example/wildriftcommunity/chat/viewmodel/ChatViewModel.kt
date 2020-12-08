@@ -54,21 +54,6 @@ class ChatViewModel(private val chatRepository: ChatRepository) : ViewModel() {
         disposables.add(disposable)
     }
 
-    fun setMessage(chatRoomID: String){
-        progressListener?.onStarted()
-        val disposable = chatRepository.setMessage(chatRoomID)
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe({
-                _startChatInfo.value = true
-                progressListener?.onSuccess("")
-            }, {
-                progressListener?.onFailure("초기화 에러")
-            })
-        disposables.add(disposable)
-    }
-
-    fun getMessage() = chatRepository.getMessage()
 
     fun sendMessage(chatRoomID: String, message: String) {
         progressListener?.onStarted()

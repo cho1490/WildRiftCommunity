@@ -1,8 +1,6 @@
 package com.example.wildriftcommunity.util
 
 import android.net.Uri
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import com.example.wildriftcommunity.data.models.Chat
 import com.example.wildriftcommunity.data.models.Post
 import com.example.wildriftcommunity.data.models.User
@@ -28,12 +26,6 @@ class FirebaseSource {
     var postList = ArrayList<Post>()
 
     var chatRoomId: String? = null
-
-    private var _messageList: MutableLiveData<MutableList<Chat.Comment>> = MutableLiveData(mutableListOf())
-    val messageList: MutableLiveData<MutableList<Chat.Comment>>
-        get() = _messageList
-
-    var userInfoInChatRoom: User? = null
 
     fun currentUser() = auth.currentUser
 
@@ -224,30 +216,6 @@ class FirebaseSource {
                         emitter.onError(it)
                     }
             }
-        }
-
-    fun setMessage(chatRoomID: String) =
-        Completable.create { emitter ->
-
-
-            val userListener = object : ValueEventListener {
-                override fun onDataChange(dataSnapshot: DataSnapshot) {
-                    for(item in dataSnapshot.children) {
-                        if(item.toString() == currentUser()!!.uid)
-                            continue
-                        //println("csh : " + item.key)
-                        //db.collection("users")
-                    }
-                    emitter.onComplete()
-                }
-
-                override fun onCancelled(databaseError: DatabaseError) {
-                    emitter.onError(databaseError.toException())
-                }
-            }
-
-            realtimeDb.child("chatRooms").child(chatRoomID).child("users").addListenerForSingleValueEvent(userListener)
-
         }
 
     fun sendMessage(chatRoomID: String, message: String) =

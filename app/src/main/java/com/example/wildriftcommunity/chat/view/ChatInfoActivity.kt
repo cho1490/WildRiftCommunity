@@ -1,20 +1,17 @@
 package com.example.wildriftcommunity.chat.view
 
-import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.wildriftcommunity.ProgressListener
 import com.example.wildriftcommunity.R
-import com.example.wildriftcommunity.chat.adapter.MessageRecyclerView
+import com.example.wildriftcommunity.chat.adapter.MessageListAdapter
 import com.example.wildriftcommunity.chat.viewmodel.ChatViewModel
 import com.example.wildriftcommunity.chat.viewmodel.ChatViewModelFactory
-import com.example.wildriftcommunity.data.models.Chat
 import com.example.wildriftcommunity.databinding.ActivityChatInfoBinding
 import kotlinx.android.synthetic.main.activity_chat_info.view.*
 import org.kodein.di.KodeinAware
@@ -49,7 +46,7 @@ class ChatInfoActivity : AppCompatActivity(), ProgressListener, KodeinAware {
         binding.messageRecyclerView.apply {
             layoutManager = LinearLayoutManager(this@ChatInfoActivity, LinearLayoutManager.VERTICAL, false)
             setHasFixedSize(true)
-            adapter = MessageRecyclerView(roomID!!, messageRecyclerView)
+            adapter = MessageListAdapter(roomID!!, messageRecyclerView)
         }
 
 

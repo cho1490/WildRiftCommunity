@@ -10,14 +10,12 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-    <de.hdodenhof.circleimageview.CircleImageView
-        android:id="@+id/iv_chatListItemProfileImage"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:background="#000000"
-        android:src="@drawable/ic_baseline_person_24"/>
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/iv_chatListItemProfileImage"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
 
         <TextView
             android:id="@+id/tv_chatListItemNickname"

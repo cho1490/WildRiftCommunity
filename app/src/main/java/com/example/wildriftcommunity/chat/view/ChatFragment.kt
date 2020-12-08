@@ -10,8 +10,10 @@ import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.wildriftcommunity.ProgressListener
 import com.example.wildriftcommunity.R
+import com.example.wildriftcommunity.chat.adapter.ChatListAdapter
 import com.example.wildriftcommunity.chat.viewmodel.ChatViewModel
 import com.example.wildriftcommunity.chat.viewmodel.ChatViewModelFactory
 import com.example.wildriftcommunity.databinding.ChatFragmentBinding
@@ -37,8 +39,10 @@ class ChatFragment : Fragment(), ProgressListener, KodeinAware {
         binding.chatViewModel = chatViewModel
         chatViewModel.progressListener = this
 
-        binding.button.setOnClickListener {
-           chatViewModel.findRoomId("mcxncSzaKoOgYq2Rfc9JEVHqCSI3")
+        binding.chatListRecyclerView.apply {
+            layoutManager = LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
+            setHasFixedSize(true)
+            adapter = ChatListAdapter()
         }
 
         chatViewModel.startChatInfo.observe(viewLifecycleOwner, Observer {
