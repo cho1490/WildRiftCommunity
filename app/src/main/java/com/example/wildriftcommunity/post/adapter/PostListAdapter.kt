@@ -9,7 +9,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.wildriftcommunity.R
 import com.example.wildriftcommunity.data.models.Post
+import com.example.wildriftcommunity.data.models.User
 import com.example.wildriftcommunity.post.view.PostInfoActivity
+import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.post_list_item.view.*
 
 class PostListAdapter(private val list: List<Post>): RecyclerView.Adapter<PostListAdapter.ViewHolder>(){
@@ -24,28 +26,30 @@ class PostListAdapter(private val list: List<Post>): RecyclerView.Adapter<PostLi
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.apply {
-            bind(list[position])
-            itemView.setOnClickListener {
-                val intent = Intent(holder.itemView.context, PostInfoActivity::class.java)
-                intent.putExtra("postData", list[position])
-                ContextCompat.startActivity(holder.itemView.context, intent, null)
+        val db: FirebaseFirestore = FirebaseFirestore.getInstance()
+        var user: User? = null
+        db.collection("users").document(list[position].userUid!!).get().addOnCompleteListener {
+            user = it.result?.toObject(User::class.java)!!
+
+            holder.itemView.apply {
+                Glide.with(this).load(user!!.photoUri).into(iv_postListItemProfileImage)
+                tv_postListItemNickname.text = user!!.nickname
+                tv_postListItemTime.text = list[position].timestamp.toString() // timeStamp
+                tv_postListItemTitle.text = list[position].title // title
+                tv_postListItemBody.text = list[position].body // body
+                Glide.with(this).load(list[position].imageUrl).into(iv_postListItemBodyImage) // photo
+
+                setOnClickListener {
+                    val intent = Intent(holder.itemView.context, PostInfoActivity::class.java)
+                    intent.putExtra("postData", list[position])
+                    ContextCompat.startActivity(holder.itemView.context, intent, null)
+                }
             }
+
         }
     }
 
     class ViewHolder(itemView: View): RecyclerView.ViewHolder(itemView){
-
-        fun bind(item: Post){
-            itemView.apply {
-                Glide.with(this).load(item.userObject!!.photoUri).into(iv_postListItemProfileImage) // profileImage
-                tv_postListItemNickname.text = item.userObject!!.nickname // nickname
-                tv_postListItemTime.text = item.timestamp.toString() // timeStamp
-                tv_postListItemTitle.text = item.title // title
-                tv_postListItemBody.text = item.body // body
-                Glide.with(this).load(item.imageUrl).into(iv_postListItemBodyImage) // photo
-            }
-        }
 
     }
 

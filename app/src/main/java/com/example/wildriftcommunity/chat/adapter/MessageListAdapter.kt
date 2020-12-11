@@ -48,9 +48,11 @@ class MessageListAdapter(roomID: String, recyclerView: RecyclerView): RecyclerVi
             override fun onCancelled(databaseError: DatabaseError) {
             }
         }
+        FirebaseDatabase.getInstance().reference.child("chatRooms").apply {
+            child(roomID).child("comments").addValueEventListener(messageListListener)
+            child(roomID).child("users").addListenerForSingleValueEvent(userListener)
+        }
 
-        FirebaseDatabase.getInstance().reference.child("chatRooms").child(roomID).child("comments").addValueEventListener(messageListListener)
-        FirebaseDatabase.getInstance().reference.child("chatRooms").child(roomID).child("users").addListenerForSingleValueEvent(userListener)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {

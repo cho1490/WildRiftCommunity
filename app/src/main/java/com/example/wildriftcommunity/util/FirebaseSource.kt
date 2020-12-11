@@ -1,5 +1,6 @@
 package com.example.wildriftcommunity.util
 
+import android.annotation.SuppressLint
 import android.net.Uri
 import com.example.wildriftcommunity.data.models.Chat
 import com.example.wildriftcommunity.data.models.Post
@@ -85,6 +86,7 @@ class FirebaseSource {
                 }
         }
 
+    @SuppressLint("SimpleDateFormat")
     fun updateUserDetails(photoUri: Uri?, nickname: String, introduce: String) =
         Completable.create { emitter ->
             val userRef = db.collection("users")
@@ -118,6 +120,7 @@ class FirebaseSource {
                 }
         }
 
+    @SuppressLint("SimpleDateFormat")
     fun createPost(type: String, title: String, body: String, photoUri: Uri?) =
         Completable.create { emitter ->
             val postRef = db.collection("posts")
@@ -164,12 +167,6 @@ class FirebaseSource {
                             postList.clear()
                             for (snapshot in it.result!!) {
                                 val postItem = snapshot.toObject(Post::class.java)
-                                var userObject: User? = null
-                                db.collection("users").document(postItem.userUid!!).get().addOnSuccessListener { ds ->
-                                    //userObject = ds.toObject(User::class.java) 이 쪽 수정해야햔다.
-                                    //println("csh : " + ds.toObject(User::class.java)!!.photoUri) 사진 uri ㅇ
-                                }
-                                postItem.userObject = User()
                                 postList.add(postItem)
                             }
                             emitter.onComplete()

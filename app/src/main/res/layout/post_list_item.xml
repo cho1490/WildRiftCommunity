@@ -10,40 +10,29 @@
         android:layout_height="match_parent"
         android:layout_margin="5dp">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/cl_postListItemInfoBox"
-            android:layout_width="match_parent"
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/iv_postListItemProfileImage"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
+
+        <TextView
+            android:id="@+id/tv_postListItemNickname"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
+            app:layout_constraintStart_toEndOf="@id/iv_postListItemProfileImage"
+            app:layout_constraintTop_toTopOf="@id/iv_postListItemProfileImage"
+            app:layout_constraintBottom_toBottomOf="@id/iv_postListItemProfileImage"/>
+
+        <TextView
+            android:id="@+id/tv_postListItemTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_marginEnd="10dp"
-            app:layout_constraintTop_toTopOf="parent">
-
-            <de.hdodenhof.circleimageview.CircleImageView
-                android:id="@+id/iv_postListItemProfileImage"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"/>
-
-            <TextView
-                android:id="@+id/tv_postListItemNickname"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                app:layout_constraintStart_toEndOf="@id/iv_postListItemProfileImage"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"/>
-
-            <TextView
-                android:id="@+id/tv_postListItemTime"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="10dp"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"/>
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
 
         <View
             android:id="@+id/v_postListItemLine1"
@@ -53,7 +42,7 @@
             android:paddingTop="10dp"
             android:layout_marginStart="10dp"
             android:layout_marginEnd="10dp"
-            app:layout_constraintTop_toBottomOf="@id/cl_postListItemInfoBox"
+            app:layout_constraintTop_toBottomOf="@id/iv_postListItemProfileImage"
             android:background="#323232" />
 
         <TextView
@@ -73,7 +62,6 @@
             android:layout_height="wrap_content"
             android:textSize="13dp"
             android:layout_marginTop="10dp"
-            android:layout_marginBottom="15dp"
             app:layout_constraintStart_toStartOf="@id/tv_postListItemTitle"
             app:layout_constraintTop_toBottomOf="@id/tv_postListItemTitle"/>
 
@@ -81,6 +69,7 @@
             android:id="@+id/iv_postListItemBodyImage"
             android:layout_width="wrap_content"
             android:layout_height="150dp"
+            android:layout_marginTop="10dp"
             android:scaleType="fitCenter"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tv_postListItemBody"
@@ -96,48 +85,38 @@
             app:layout_constraintTop_toBottomOf="@id/iv_postListItemBodyImage"
             android:background="#323232" />
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/cl_postListItemBtnBox"
-            android:layout_width="match_parent"
+        <Button
+            android:id="@+id/btn_postListItemLike"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:layout_marginEnd="10dp"
-            app:layout_constraintTop_toBottomOf="@id/v_postListItemLine2">
+            android:text="좋아요"
+            android:textSize="13dp"
+            android:background="#FFFFFF"
+            android:drawableStart="@drawable/ic_baseline_favorite_border_24"
+            app:layout_constraintStart_toStartOf="@id/v_postListItemLine2"
+            app:layout_constraintTop_toBottomOf="@id/v_postListItemLine2"
+            app:layout_constraintEnd_toStartOf="@id/btn_postListItemComment"/>
 
-            <Button
-                android:id="@+id/btn_postListItemLike"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:text="좋아요"
-                android:textSize="13dp"
-                android:background="#FFFFFF"
-                android:drawableStart="@drawable/ic_baseline_favorite_border_24"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintEnd_toStartOf="@id/btn_postListItemComment"/>
+        <Button
+            android:id="@+id/btn_postListItemComment"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="댓글 달기"
+            android:textSize="13dp"
+            android:background="#FFFFFF"
+            android:drawableStart="@drawable/ic_baseline_comment_24"
+            app:layout_constraintStart_toEndOf="@id/btn_postListItemLike"
+            app:layout_constraintTop_toTopOf="@id/btn_postListItemLike"
+            app:layout_constraintEnd_toStartOf="@id/any"/>
 
-            <Button
-                android:id="@+id/btn_postListItemComment"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:text="댓글 달기"
-                android:textSize="13dp"
-                android:background="#FFFFFF"
-                android:drawableStart="@drawable/ic_baseline_comment_24"
-                app:layout_constraintStart_toEndOf="@id/btn_postListItemLike"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintEnd_toStartOf="@id/any"/>
-
-            <Button
-                android:id="@+id/any"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:background="#FFFFFF"
-                app:layout_constraintStart_toEndOf="@id/btn_postListItemComment"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"/>
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
+        <Button
+            android:id="@+id/any"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:background="#FFFFFF"
+            app:layout_constraintStart_toEndOf="@id/btn_postListItemComment"
+            app:layout_constraintTop_toTopOf="@id/btn_postListItemComment"
+            app:layout_constraintEnd_toEndOf="@id/v_postListItemLine2"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

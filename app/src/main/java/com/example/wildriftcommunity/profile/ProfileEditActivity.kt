@@ -14,7 +14,6 @@ import com.bumptech.glide.Glide
 import com.example.wildriftcommunity.ProgressListener
 import com.example.wildriftcommunity.R
 import com.example.wildriftcommunity.databinding.ActivityProfileEditBinding
-import kotlinx.android.synthetic.main.activity_profile_edit.*
 import org.kodein.di.KodeinAware
 import org.kodein.di.android.kodein
 import org.kodein.di.generic.instance
@@ -86,15 +85,15 @@ class ProfileEditActivity : AppCompatActivity(), ProgressListener, KodeinAware {
     }
 
     override fun onStarted() {
-        progressbarProfileEdit.visibility = View.VISIBLE
+        binding.progressbarProfileEdit.visibility = View.VISIBLE
     }
 
     override fun onSuccess(message: String) {
-        progressbarProfileEdit.visibility = View.GONE
+        binding.progressbarProfileEdit.visibility = View.GONE
     }
 
     override fun onFailure(message: String) {
-        progressbarProfileEdit.visibility = View.GONE
+        binding.progressbarProfileEdit.visibility = View.GONE
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
     }
 }

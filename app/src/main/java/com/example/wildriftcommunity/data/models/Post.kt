@@ -11,7 +11,6 @@ data class Post(
     var imageUrl: String? = null,
     var timestamp: Long? = null,
     var userUid: String? = null,
-    var userObject: User? = null,
     var favoriteCount: Int = 0,
     var favorites: MutableMap<String, Boolean> = HashMap()): Parcelable
 {

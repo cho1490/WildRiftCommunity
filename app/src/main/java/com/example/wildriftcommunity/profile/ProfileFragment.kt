@@ -48,7 +48,8 @@ class ProfileFragment : Fragment(), KodeinAware, ProgressListener {
         })
 
         profileViewModel.startProfileEdit.observe(viewLifecycleOwner, Observer {
-            startActivity(Intent(activity, ProfileEditActivity::class.java))
+            if(it == true)
+                startActivity(Intent(activity, ProfileEditActivity::class.java))
         })
 
         return binding.root

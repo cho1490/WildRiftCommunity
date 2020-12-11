@@ -24,6 +24,8 @@ class MainActivity : AppCompatActivity() {
         val noticeFragment = NoticeFragment()
         val profileFragment = ProfileFragment()
 
+        makeCurrentFragment(postFragment)
+
         bottomnavigationView.setOnNavigationItemSelectedListener {
             when(it.itemId){
                 R.id.menu_post -> makeCurrentFragment(postFragment)

@@ -72,7 +72,6 @@ class ProfileViewModel(private val profileRepository: ProfileRepository) : ViewM
     fun updateUserDetails(){
         _startUpdate.value = true
         _startUpdate.value = false
-
         progressListener?.onStarted()
         val disposable = profileRepository.updateUserDetails(photoUri.value, nickname.value!!, introduce.value!!)
             .subscribeOn(Schedulers.io())
