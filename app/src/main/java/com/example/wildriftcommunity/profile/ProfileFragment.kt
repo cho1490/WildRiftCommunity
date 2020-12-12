@@ -61,15 +61,15 @@ class ProfileFragment : Fragment(), KodeinAware, ProgressListener {
     }
 
     override fun onStarted() {
-        progressbarProfile.visibility = View.VISIBLE
+        binding.progressbarProfile.visibility = View.VISIBLE
     }
 
     override fun onSuccess(message: String) {
-        progressbarProfile.visibility = View.GONE
+        binding.progressbarProfile.visibility = View.GONE
     }
 
     override fun onFailure(message: String) {
-        progressbarProfile.visibility = View.GONE
+        binding.progressbarProfile.visibility = View.GONE
         Toast.makeText(activity, message, Toast.LENGTH_SHORT).show()
     }
 

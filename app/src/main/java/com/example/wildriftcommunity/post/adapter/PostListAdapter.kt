@@ -14,7 +14,6 @@ import com.example.wildriftcommunity.data.models.User
 import com.example.wildriftcommunity.post.view.PostInfoActivity
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.post_list_item.view.*
-import java.text.SimpleDateFormat
 import java.util.*
 
 @Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
@@ -36,12 +35,12 @@ class PostListAdapter(private val list: List<Post>): RecyclerView.Adapter<PostLi
             user = it.result?.toObject(User::class.java)!!
 
             holder.itemView.apply {
-                Glide.with(this).load(user!!.photoUri).into(iv_postListItemProfileImage)
-                tv_postListItemNickname.text = user!!.nickname
-                tv_postListItemTime.text = timeConverter(list[position].timestamp.toString()) // timeStamp
-                tv_postListItemTitle.text = list[position].title // title
-                tv_postListItemBody.text = list[position].body // body
-                Glide.with(this).load(list[position].imageUrl).into(iv_postListItemBodyImage) // photo
+                Glide.with(this).load(user!!.photoUri).into(profileImage)
+                nickname.text = user!!.nickname
+                time.text = timeConverter(list[position].timestamp.toString()) // timeStamp
+                title.text = list[position].title // title
+                body.text = list[position].body // body
+                Glide.with(this).load(list[position].imageUrl).into(bodyImage) // photo
 
                 setOnClickListener {
                     val intent = Intent(holder.itemView.context, PostInfoActivity::class.java)

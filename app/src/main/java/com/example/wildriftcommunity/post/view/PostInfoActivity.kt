@@ -38,9 +38,7 @@ class PostInfoActivity : AppCompatActivity(), ProgressListener, KodeinAware {
         binding.lifecycleOwner = this
 
         binding.apply {
-            postTitle.text = postData!!.title
-            postBody.text = postData!!.body
-            Glide.with(this.root).load(postData!!.imageUrl).into(postImage)
+          
         }
 
     }
