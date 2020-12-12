@@ -41,9 +41,9 @@ class ProfileFragment : Fragment(), KodeinAware, ProgressListener {
                 Glide.with(activity!!).load(it.photoUri).into(profileImage)
                 nickname.text = it.nickname
                 introduce.text = it.introduce
-                postCountText.text = it.postCount.toString()
-                likeCountText.text = it.lickCount.toString()
-                kindScoreText.text = it.kindScore.toString()
+                postCount.text = it.postCount.toString()
+                likeCount.text = it.lickCount.toString()
+                kindScore.text = it.kindScore.toString()
             }
         })
 
