@@ -38,7 +38,6 @@ class PostInfoActivity : AppCompatActivity(), ProgressListener, KodeinAware {
         binding.lifecycleOwner = this
 
         binding.apply {
-            postType.text = postData!!.type + "게시판"
             postTitle.text = postData!!.title
             postBody.text = postData!!.body
             Glide.with(this.root).load(postData!!.imageUrl).into(postImage)
