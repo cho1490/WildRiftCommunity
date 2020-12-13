@@ -43,6 +43,10 @@ class PostViewModel(private val postRepository: PostRepository) : ViewModel() {
     val startGetPost: LiveData<Boolean>
         get() = _startGetPost
 
+    private var _startPostInfo = MutableLiveData<Boolean>()
+    val startPostInfo: LiveData<Boolean>
+        get() = _startPostInfo
+
     fun createPost() {
         _startCreatePost.value = true
         _startCreatePost.value = false
@@ -90,6 +94,21 @@ class PostViewModel(private val postRepository: PostRepository) : ViewModel() {
     }
 
     fun getPostList() = postRepository.getPostList()
+
+    fun setUserInfoInPost(userUid: String){
+        progressListener?.onStarted()
+        val disposable = postRepository.setUserInfoInPost(userUid)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe({
+                progressListener?.onSuccess("")
+                _startPostInfo.value = true
+            }, {
+                progressListener?.onFailure("")
+            })
+    }
+
+    fun getUserInfoInPost() = postRepository.getUserInfoInPost()
 
     override fun onCleared() {
         super.onCleared()

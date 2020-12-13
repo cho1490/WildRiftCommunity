@@ -50,6 +50,7 @@ class PostFragment : Fragment(), ProgressListener, KodeinAware {
                     adapter = PostListAdapter(postList)
                 }
             }
+
         })
 
         postType.observe(viewLifecycleOwner, Observer {

@@ -11,4 +11,8 @@ class PostRepository(private val firebase: FirebaseSource){
 
     fun getPostList() = firebase.postList
 
+    fun setUserInfoInPost(userUid: String) = firebase.setUserInfoInPost(userUid)
+
+    fun getUserInfoInPost() = firebase.userInfoInPost
+
 }

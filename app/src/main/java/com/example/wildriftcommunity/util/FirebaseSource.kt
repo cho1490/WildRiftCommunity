@@ -23,9 +23,14 @@ class FirebaseSource {
     private val storage: StorageReference by lazy { FirebaseStorage.getInstance().reference }
     private val realtimeDb: DatabaseReference by lazy { FirebaseDatabase.getInstance().reference }
 
+    //profile
     lateinit var userInfoInProfile: User
-    var postList = ArrayList<Post>()
 
+    //post
+    var postList = ArrayList<Post>()
+    var userInfoInPost: User? = null
+
+    //chat
     var chatRoomId: String? = null
 
     fun currentUser() = auth.currentUser
@@ -79,8 +84,8 @@ class FirebaseSource {
                     if (!emitter.isDisposed) {
                         if (it.isSuccessful) {
                             userInfoInProfile = it.result?.toObject(User::class.java)!!
+                            emitter.onComplete()
                         }
-                        emitter.onComplete()
                     } else
                         emitter.onError(it.exception!!)
                 }
@@ -90,7 +95,7 @@ class FirebaseSource {
     fun updateUserDetails(photoUri: Uri?, nickname: String, introduce: String) =
         Completable.create { emitter ->
             val userRef = db.collection("users")
-            var fieldUpdateMap = mutableMapOf<String, Any>()
+            val fieldUpdateMap = mutableMapOf<String, Any>()
             if (photoUri != null) {
                 val timeStamp = SimpleDateFormat("yyyy-mm-dd_HH:mm:ss").format(Date())
                 val imageFileName = "Image_" + timeStamp + "_.png"
@@ -169,6 +174,21 @@ class FirebaseSource {
                                 val postItem = snapshot.toObject(Post::class.java)
                                 postList.add(postItem)
                             }
+                            emitter.onComplete()
+                        } else
+                            emitter.onError(it.exception!!)
+                    }
+                }
+        }
+
+    fun setUserInfoInPost(userUid: String) =
+        Completable.create{ emitter ->
+            val userRef = db.collection("users")
+            userRef.document(userUid).get()
+                .addOnCompleteListener {
+                    if (!emitter.isDisposed){
+                        if (it.isSuccessful){
+                            userInfoInPost = it.result?.toObject(User::class.java)!!
                             emitter.onComplete()
                         } else
                             emitter.onError(it.exception!!)

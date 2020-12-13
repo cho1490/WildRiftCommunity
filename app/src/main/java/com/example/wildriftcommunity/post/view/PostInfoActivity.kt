@@ -4,11 +4,13 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.example.wildriftcommunity.ProgressListener
 import com.example.wildriftcommunity.R
 import com.example.wildriftcommunity.data.models.Post
+import com.example.wildriftcommunity.data.models.User
 import com.example.wildriftcommunity.databinding.ActivityPostInfoBinding
 import com.example.wildriftcommunity.post.viewmodel.PostViewModel
 import com.example.wildriftcommunity.post.viewmodel.PostViewModelFactory
@@ -23,24 +25,31 @@ class PostInfoActivity : AppCompatActivity(), ProgressListener, KodeinAware {
     private lateinit var postViewModel: PostViewModel
     private lateinit var binding : ActivityPostInfoBinding
 
-    var postData: Post? = null
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        postData = intent.getParcelableExtra<Post>("postData")
-
         postViewModel = ViewModelProvider(this, factory).get(PostViewModel::class.java)
         postViewModel.progressListener = this
-
         binding = DataBindingUtil.setContentView(this, R.layout.activity_post_info)
         binding.profileViewModel = postViewModel
         binding.lifecycleOwner = this
 
-        binding.apply {
-          
-        }
+        val postData = intent.getParcelableExtra<Post>("postData")!!
+        val userUid = intent.getStringExtra("userUid")!!
+        postViewModel.setUserInfoInPost(userUid)
 
+        postViewModel.startPostInfo.observe(this, Observer {
+            if (it == true){
+                binding.apply {
+                    val user: User = postViewModel.getUserInfoInPost()!!
+                    Glide.with(this@PostInfoActivity).load(user.photoUri).into(profileImage)
+                    nickname.text = user.nickname
+                    title.text = postData.title
+                    body.text = postData.body
+                    Glide.with(this@PostInfoActivity).load(postData.imageUrl).into(bodyImage)
+                }
+            }
+        })
     }
 
     override fun onStarted() {
