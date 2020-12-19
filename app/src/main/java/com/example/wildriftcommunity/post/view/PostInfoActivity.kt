@@ -6,12 +6,14 @@ import android.view.View
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.example.wildriftcommunity.ProgressListener
 import com.example.wildriftcommunity.R
 import com.example.wildriftcommunity.data.models.Post
 import com.example.wildriftcommunity.data.models.User
 import com.example.wildriftcommunity.databinding.ActivityPostInfoBinding
+import com.example.wildriftcommunity.post.adapter.CommentListAdapter
 import com.example.wildriftcommunity.post.viewmodel.PostViewModel
 import com.example.wildriftcommunity.post.viewmodel.PostViewModelFactory
 import org.kodein.di.KodeinAware
@@ -52,6 +54,12 @@ class PostInfoActivity : AppCompatActivity(), ProgressListener, KodeinAware {
                 }
             }
         })
+
+        binding.commentRecyclerView.apply{
+            layoutManager = LinearLayoutManager(this@PostInfoActivity, LinearLayoutManager.VERTICAL, false)
+            setHasFixedSize(true)
+            adapter = CommentListAdapter(postId)
+        }
 
         binding.sendComment.setOnClickListener {
 

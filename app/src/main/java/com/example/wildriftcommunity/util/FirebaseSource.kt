@@ -219,7 +219,7 @@ class FirebaseSource {
             val chatRoomIDListener = object : ValueEventListener {
                 override fun onDataChange(dataSnapshot: DataSnapshot) {
                     var chat: Chat?
-                    for(item in dataSnapshot.children){
+                    for (item in dataSnapshot.children){
                         chat = item.getValue(Chat::class.java)
                         if(chat!!.users.contains(destinationUid)){
                             chatRoomId = item.key
