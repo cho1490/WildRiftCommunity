@@ -93,11 +93,12 @@ class PostViewModel(private val postRepository: PostRepository) : ViewModel() {
         disposables.add(disposable)
     }
 
-    fun getPostList() = postRepository.getPostList()
+    fun getPostIdList() = postRepository.getPostIdList()
 
-    fun setUserInfoInPost(userUid: String){
+    fun setDataInfoInPost(postId: String, userUid: String){
         progressListener?.onStarted()
-        val disposable = postRepository.setUserInfoInPost(userUid)
+        val disposable = postRepository.setPostInfoInPost(postId)
+            .andThen(postRepository.setUserInfoInPost(userUid))
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({
@@ -106,9 +107,17 @@ class PostViewModel(private val postRepository: PostRepository) : ViewModel() {
             }, {
                 progressListener?.onFailure("")
             })
+
+        disposables.add(disposable)
     }
 
+    fun getPostInfoInPost() = postRepository.getPostInfoInPost()
+
     fun getUserInfoInPost() = postRepository.getUserInfoInPost()
+
+    fun sendMessage(){
+
+    }
 
     override fun onCleared() {
         super.onCleared()

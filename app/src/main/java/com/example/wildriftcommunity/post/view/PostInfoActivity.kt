@@ -34,22 +34,29 @@ class PostInfoActivity : AppCompatActivity(), ProgressListener, KodeinAware {
         binding.profileViewModel = postViewModel
         binding.lifecycleOwner = this
 
-        val postData = intent.getParcelableExtra<Post>("postData")!!
+        val postId = intent.getStringExtra("postId")!!
         val userUid = intent.getStringExtra("userUid")!!
-        postViewModel.setUserInfoInPost(userUid)
+
+        postViewModel.setDataInfoInPost(postId, userUid)
 
         postViewModel.startPostInfo.observe(this, Observer {
             if (it == true){
                 binding.apply {
+                    val post: Post = postViewModel.getPostInfoInPost()!!
                     val user: User = postViewModel.getUserInfoInPost()!!
                     Glide.with(this@PostInfoActivity).load(user.photoUri).into(profileImage)
                     nickname.text = user.nickname
-                    title.text = postData.title
-                    body.text = postData.body
-                    Glide.with(this@PostInfoActivity).load(postData.imageUrl).into(bodyImage)
+                    title.text = post.title
+                    body.text = post.body
+                    Glide.with(this@PostInfoActivity).load(post.imageUrl).into(bodyImage)
                 }
             }
         })
+
+        binding.sendComment.setOnClickListener {
+
+        }
+
     }
 
     override fun onStarted() {

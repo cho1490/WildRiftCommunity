@@ -17,7 +17,6 @@ data class Post(
     @Parcelize
     data class Comment(
         var uid: String? = null,
-        var nickname: String?,
         var comment: String? = null,
         var timestamp: Long? = null): Parcelable
 }

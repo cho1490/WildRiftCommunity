@@ -173,11 +173,11 @@
             android:hint="메시지 입력"
             android:inputType="textPersonName"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/sendMessage"
+            app:layout_constraintEnd_toStartOf="@+id/sendComment"
             app:layout_constraintStart_toStartOf="parent" />
 
         <Button
-            android:id="@+id/sendMessage"
+            android:id="@+id/sendComment"
             android:layout_width="wrap_content"
             android:layout_height="50dp"
             android:text="보내기"

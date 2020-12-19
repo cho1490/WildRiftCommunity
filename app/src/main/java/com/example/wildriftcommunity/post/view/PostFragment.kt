@@ -27,7 +27,6 @@ class PostFragment : Fragment(), ProgressListener, KodeinAware {
     override val kodein by kodein()
     private lateinit var postViewModel: PostViewModel
     private val factory: PostViewModelFactory by instance()
-    lateinit var postList: List<Post>
 
     private var _postType = MutableLiveData<String>()
     private val postType: LiveData<String>
@@ -43,11 +42,12 @@ class PostFragment : Fragment(), ProgressListener, KodeinAware {
 
         postViewModel.startGetPost.observe(viewLifecycleOwner, Observer {
             if(it == true) {
-                postList = postViewModel.getPostList()
+                val postIdList: List<String>
+                postIdList = postViewModel.getPostIdList()
                 rv_postFragmentPostList.apply {
                     layoutManager = LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
                     setHasFixedSize(true)
-                    adapter = PostListAdapter(postList)
+                    adapter = PostListAdapter(postIdList)
                 }
             }
 

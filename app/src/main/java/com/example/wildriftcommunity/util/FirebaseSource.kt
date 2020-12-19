@@ -8,7 +8,6 @@ import com.example.wildriftcommunity.data.models.User
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.Query
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import io.reactivex.Completable
@@ -27,7 +26,8 @@ class FirebaseSource {
     lateinit var userInfoInProfile: User
 
     //post
-    var postList = ArrayList<Post>()
+    var postIdList = ArrayList<String>()
+    var postInfoInPost: Post? = null
     var userInfoInPost: User? = null
 
     //chat
@@ -165,15 +165,13 @@ class FirebaseSource {
     fun setPostList(type: String) =
         Completable.create { emitter ->
             val postsRef = db.collection("posts")
-            postsRef.whereEqualTo("type", type).orderBy("timestamp", Query.Direction.ASCENDING).get()
+            postsRef.whereEqualTo("type", type).orderBy("timestamp").get()
                 .addOnCompleteListener {
                     if (!emitter.isDisposed) {
                         if (it.isSuccessful) {
-                            postList.clear()
-                            for (snapshot in it.result!!) {
-                                val postItem = snapshot.toObject(Post::class.java)
-                                postList.add(postItem)
-                            }
+                            postIdList.clear()
+                            for (snapshot in it.result!!)
+                                postIdList.add(snapshot.id)
                             emitter.onComplete()
                         } else
                             emitter.onError(it.exception!!)
@@ -181,19 +179,39 @@ class FirebaseSource {
                 }
         }
 
+    fun setPostInfoInPost(postId: String) =
+        Completable.create { emitter ->
+            val postRef = db.collection("posts")
+                postRef.document(postId).get()
+                    .addOnCompleteListener{
+                        if(!emitter.isDisposed){
+                            if(it.isSuccessful){
+                                postInfoInPost = it.result?.toObject(Post::class.java)
+                                emitter.onComplete()
+                            } else
+                                emitter.onError(it.exception!!)
+                        }
+                    }
+        }
+
     fun setUserInfoInPost(userUid: String) =
-        Completable.create{ emitter ->
+        Completable.create { emitter ->
             val userRef = db.collection("users")
             userRef.document(userUid).get()
                 .addOnCompleteListener {
                     if (!emitter.isDisposed){
                         if (it.isSuccessful){
-                            userInfoInPost = it.result?.toObject(User::class.java)!!
+                            userInfoInPost = it.result?.toObject(User::class.java)
                             emitter.onComplete()
                         } else
                             emitter.onError(it.exception!!)
                     }
                 }
+        }
+
+    fun sendComment() =
+        Completable.create { emitter ->
+
         }
 
     fun findRoomId(destinationUid: String) =

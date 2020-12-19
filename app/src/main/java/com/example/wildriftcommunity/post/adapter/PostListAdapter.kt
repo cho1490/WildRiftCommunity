@@ -16,7 +16,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.post_list_item.view.*
 
 @Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
-class PostListAdapter(private val list: List<Post>): RecyclerView.Adapter<PostListAdapter.ViewHolder>(){
+class PostListAdapter(private val idList: List<String>): RecyclerView.Adapter<PostListAdapter.ViewHolder>(){
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.post_list_item, parent, false)
@@ -24,30 +24,35 @@ class PostListAdapter(private val list: List<Post>): RecyclerView.Adapter<PostLi
     }
 
     override fun getItemCount(): Int {
-        return list.size
+        return idList.size
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val db: FirebaseFirestore = FirebaseFirestore.getInstance()
+        var post: Post? = null
         var user: User? = null
-        db.collection("users").document(list[position].userUid!!).get().addOnCompleteListener {
-            user = it.result?.toObject(User::class.java)!!
 
-            holder.itemView.apply {
-                Glide.with(this).load(user!!.photoUri).into(profileImage)
-                nickname.text = user!!.nickname
-                time.text = timeConverter(list[position].timestamp.toString()) // timeStamp
-                title.text = list[position].title // title
-                body.text = list[position].body // body
-                Glide.with(this).load(list[position].imageUrl).into(bodyImage) // photo
+        db.collection("posts").document(idList[position]).get().addOnCompleteListener { postSnapshot ->
+            post = postSnapshot.result?.toObject(Post::class.java)
+            db.collection("users").document(post!!.userUid!!).get().addOnCompleteListener { userSnapshot ->
+                user = userSnapshot.result?.toObject(User::class.java)!!
 
-                setOnClickListener {
-                    val intent = Intent(holder.itemView.context, PostInfoActivity::class.java)
-                    intent.apply {
-                        putExtra("postData", list[position])
-                        putExtra("userUid", list[position].userUid)
+                holder.itemView.apply {
+                    Glide.with(this).load(user!!.photoUri).into(profileImage)
+                    nickname.text = user!!.nickname
+                    time.text = timeConverter(post!!.timestamp.toString()) // timeStamp
+                    title.text = post!!.title // title
+                    body.text = post!!.body // body
+                    Glide.with(this).load(post!!.imageUrl).into(bodyImage) // photo
+
+                    setOnClickListener {
+                        val intent = Intent(holder.itemView.context, PostInfoActivity::class.java)
+                        intent.apply {
+                            putExtra("postId", idList[position])
+                            putExtra("userUid", post!!.userUid)
+                        }
+                        ContextCompat.startActivity(holder.itemView.context, intent, null)
                     }
-                    ContextCompat.startActivity(holder.itemView.context, intent, null)
                 }
             }
         }
