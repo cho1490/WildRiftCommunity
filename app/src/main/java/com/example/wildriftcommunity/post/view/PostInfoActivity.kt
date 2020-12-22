@@ -63,13 +63,8 @@ class PostInfoActivity : AppCompatActivity(), ProgressListener, KodeinAware {
 
         binding.sendComment.setOnClickListener {
             postViewModel.sendMessage(postId, binding.sendMessageBody.text.toString())
-            binding.commentRecyclerView.adapter!!.notifyDataSetChanged()
+            binding.sendMessageBody.setText("")
         }
-
-        postViewModel.updatedComment.observe(this, Observer{
-            if (it == true)
-                binding.commentRecyclerView.adapter!!.notifyDataSetChanged()
-        })
 
     }
 
@@ -84,4 +79,6 @@ class PostInfoActivity : AppCompatActivity(), ProgressListener, KodeinAware {
     override fun onFailure(message: String) {
         binding.progressbarPostInfo.visibility = View.GONE
     }
+
+
 }

@@ -6,7 +6,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_marginTop="5dp"
     android:layout_marginBottom="5dp"
-    android:padding="5dp"
+    android:padding="3dp"
     android:background="@drawable/textbox_style_round2">
 
         <de.hdodenhof.circleimageview.CircleImageView

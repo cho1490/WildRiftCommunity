@@ -59,11 +59,13 @@ class CommentListAdapter(postId: String, private val pia: PostInfoActivity): Rec
                     commentListItemComment.text = list[position].comment
                     commentListItemTime.text = timeConverter(list[position].timestamp.toString())
 
-                    setOnClickListener {
-
+                    commentListItemProfileImage.setOnClickListener {
+                        pia.finish()
+                    }
+                    commentListItemComment.setOnClickListener {
+                        pia.finish()
                     }
                 }
-                println("csh 3")
             }
     }
 
