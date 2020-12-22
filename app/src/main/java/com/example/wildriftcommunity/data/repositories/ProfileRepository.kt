@@ -7,7 +7,7 @@ class ProfileRepository (private val firebase: FirebaseSource) {
 
     fun currentUserDetails() = firebase.userInfoInProfile
 
-    fun fetchUserDetails() = firebase.fetchUserDetails()
+    fun fetchUserDetails(destinationUid: String?) = firebase.fetchUserDetails(destinationUid)
 
     fun updateUserDetails(photoUri: Uri?, nickname: String, introduce: String) = firebase.updateUserDetails(photoUri, nickname, introduce)
 

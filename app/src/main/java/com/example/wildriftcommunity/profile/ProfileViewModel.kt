@@ -49,9 +49,9 @@ class ProfileViewModel(private val profileRepository: ProfileRepository) : ViewM
     val startUpdate: LiveData<Boolean>
         get() = _startUpdate
 
-    fun fetchUserDetails() {
+    fun fetchUserDetails(destinationUid: String?) {
         progressListener?.onStarted()
-        val disposable = profileRepository.fetchUserDetails()
+        val disposable = profileRepository.fetchUserDetails(destinationUid)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({

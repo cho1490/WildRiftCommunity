@@ -77,19 +77,33 @@ class FirebaseSource {
                 }
         }
 
-    fun fetchUserDetails() =
+    fun fetchUserDetails(destinationUid: String?) =
         Completable.create { emitter ->
-            val usersRef = db.collection("users")
-            usersRef.document(currentUser()!!.uid).get()
-                .addOnCompleteListener {
-                    if (!emitter.isDisposed) {
-                        if (it.isSuccessful) {
-                            userInfoInProfile = it.result?.toObject(User::class.java)!!
-                            emitter.onComplete()
-                        }
-                    } else
-                        emitter.onError(it.exception!!)
-                }
+            if (destinationUid == null) {
+                val usersRef = db.collection("users")
+                usersRef.document(currentUser()!!.uid).get()
+                    .addOnCompleteListener {
+                        if (!emitter.isDisposed) {
+                            if (it.isSuccessful) {
+                                userInfoInProfile = it.result?.toObject(User::class.java)!!
+                                emitter.onComplete()
+                            }
+                        } else
+                            emitter.onError(it.exception!!)
+                    }
+            } else {
+                val usersRef = db.collection("users")
+                usersRef.document(destinationUid).get()
+                    .addOnCompleteListener {
+                        if (!emitter.isDisposed) {
+                            if (it.isSuccessful) {
+                                userInfoInProfile = it.result?.toObject(User::class.java)!!
+                                emitter.onComplete()
+                            }
+                        } else
+                            emitter.onError(it.exception!!)
+                    }
+            }
         }
 
     @SuppressLint("SimpleDateFormat")

@@ -36,7 +36,7 @@ class ProfileEditActivity : AppCompatActivity(), ProgressListener, KodeinAware {
         binding.profileViewModel = profileViewModel
         binding.lifecycleOwner = this
 
-        profileViewModel.fetchUserDetails()
+        profileViewModel.fetchUserDetails(null)
 
         profileViewModel.userDetails.observe(this, Observer {
             binding.apply {
@@ -69,7 +69,6 @@ class ProfileEditActivity : AppCompatActivity(), ProgressListener, KodeinAware {
                 finish()
             }
         })
-
 
     }
 

@@ -1,5 +1,7 @@
 package com.example.wildriftcommunity.post.adapter
 
+import android.app.Activity.RESULT_OK
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,11 +11,13 @@ import com.bumptech.glide.request.RequestOptions
 import com.example.wildriftcommunity.R
 import com.example.wildriftcommunity.data.models.Post
 import com.example.wildriftcommunity.data.models.User
+import com.example.wildriftcommunity.main.MainActivity
 import com.example.wildriftcommunity.post.view.PostInfoActivity
 import com.example.wildriftcommunity.util.timeConverter
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import kotlinx.android.synthetic.main.comment_list_item.view.*
+
 
 class CommentListAdapter(postId: String, private val pia: PostInfoActivity): RecyclerView.Adapter<CommentListAdapter.ViewHolder>(){
 
@@ -49,6 +53,7 @@ class CommentListAdapter(postId: String, private val pia: PostInfoActivity): Rec
             .collection("users")
             .document(list[position].uid!!).get().addOnCompleteListener {
                 user = it.result!!.toObject(User::class.java)
+                val userID = it.result!!.id
                 holder.itemView.apply {
                     if (pia.isFinishing)
                         return@addOnCompleteListener
@@ -60,10 +65,24 @@ class CommentListAdapter(postId: String, private val pia: PostInfoActivity): Rec
                     commentListItemTime.text = timeConverter(list[position].timestamp.toString())
 
                     commentListItemProfileImage.setOnClickListener {
-                        pia.finish()
+                        val intent = Intent(pia, MainActivity::class.java).apply {
+                            putExtra("destinationUid", userID)
+                        }
+                        pia.apply {
+                            //println("csh : " + RESULT_OK)
+                            setResult(RESULT_OK, intent)
+                            finish()
+                        }
                     }
-                    commentListItemComment.setOnClickListener {
-                        pia.finish()
+
+                    commentListItemNickname.setOnClickListener {
+                        val intent = Intent(pia, MainActivity::class.java).apply {
+                            putExtra("destinationUid", userID)
+                        }
+                        pia.apply {
+                            setResult(RESULT_OK, intent)
+                            finish()
+                        }
                     }
                 }
             }
