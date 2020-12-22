@@ -47,7 +47,7 @@ class PostFragment : Fragment(), ProgressListener, KodeinAware {
                 rv_postFragmentPostList.apply {
                     layoutManager = LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
                     setHasFixedSize(true)
-                    adapter = PostListAdapter(postIdList)
+                    adapter = PostListAdapter(postIdList, this@PostFragment)
                 }
             }
 

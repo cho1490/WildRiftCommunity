@@ -1,8 +1,8 @@
 package com.example.wildriftcommunity.post.view
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -56,14 +56,20 @@ class PostInfoActivity : AppCompatActivity(), ProgressListener, KodeinAware {
         })
 
         binding.commentRecyclerView.apply{
-            layoutManager = LinearLayoutManager(this@PostInfoActivity, LinearLayoutManager.VERTICAL, false)
-            setHasFixedSize(true)
-            adapter = CommentListAdapter(postId)
+            layoutManager = LinearLayoutManager( this@PostInfoActivity, LinearLayoutManager.VERTICAL, false)
+            setHasFixedSize(false)
+            adapter = CommentListAdapter(postId, this@PostInfoActivity)
         }
 
         binding.sendComment.setOnClickListener {
-
+            postViewModel.sendMessage(postId, binding.sendMessageBody.text.toString())
+            binding.commentRecyclerView.adapter!!.notifyDataSetChanged()
         }
+
+        postViewModel.updatedComment.observe(this, Observer{
+            if (it == true)
+                binding.commentRecyclerView.adapter!!.notifyDataSetChanged()
+        })
 
     }
 

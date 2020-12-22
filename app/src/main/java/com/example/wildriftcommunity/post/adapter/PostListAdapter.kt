@@ -10,13 +10,14 @@ import com.bumptech.glide.Glide
 import com.example.wildriftcommunity.R
 import com.example.wildriftcommunity.data.models.Post
 import com.example.wildriftcommunity.data.models.User
+import com.example.wildriftcommunity.post.view.PostFragment
 import com.example.wildriftcommunity.post.view.PostInfoActivity
 import com.example.wildriftcommunity.util.timeConverter
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.post_list_item.view.*
 
 @Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
-class PostListAdapter(private val idList: List<String>): RecyclerView.Adapter<PostListAdapter.ViewHolder>(){
+class PostListAdapter(private val idList: List<String>, private val pf: PostFragment): RecyclerView.Adapter<PostListAdapter.ViewHolder>(){
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.post_list_item, parent, false)
@@ -38,7 +39,9 @@ class PostListAdapter(private val idList: List<String>): RecyclerView.Adapter<Po
                 user = userSnapshot.result?.toObject(User::class.java)!!
 
                 holder.itemView.apply {
-                    Glide.with(this).load(user!!.photoUri).into(profileImage)
+                    if (pf.isRemoving)
+                        return@addOnCompleteListener
+                    Glide.with(pf).load(user!!.photoUri).into(profileImage)
                     nickname.text = user!!.nickname
                     time.text = timeConverter(post!!.timestamp.toString()) // timeStamp
                     title.text = post!!.title // title

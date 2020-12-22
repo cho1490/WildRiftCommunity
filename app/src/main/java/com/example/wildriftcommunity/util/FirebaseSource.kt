@@ -8,6 +8,7 @@ import com.example.wildriftcommunity.data.models.User
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.Query
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import io.reactivex.Completable
@@ -209,9 +210,20 @@ class FirebaseSource {
                 }
         }
 
-    fun sendComment() =
+    fun sendComment(postId: String, messageBody: String) =
         Completable.create { emitter ->
+            val comment = Post.Comment(currentUser()!!.uid, messageBody, System.currentTimeMillis())
 
+            val postRef = db.collection("posts")
+            postRef.document(postId).collection("comments")
+                .document().set(comment).addOnCompleteListener {
+                    if (!emitter.isDisposed){
+                        if (it.isSuccessful)
+                            emitter.onComplete()
+                        else
+                            emitter.onError(it.exception!!)
+                    }
+                }
         }
 
     fun findRoomId(destinationUid: String) =

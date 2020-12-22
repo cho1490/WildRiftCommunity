@@ -19,4 +19,6 @@ class PostRepository(private val firebase: FirebaseSource){
 
     fun getUserInfoInPost() = firebase.userInfoInPost
 
+    fun sendComment(postId: String, messageBody: String) = firebase.sendComment(postId, messageBody)
+
 }

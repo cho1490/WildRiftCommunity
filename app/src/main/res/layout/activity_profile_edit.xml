@@ -83,16 +83,6 @@
             app:layout_constraintTop_toBottomOf="@id/currentNickname"
             app:layout_constraintStart_toStartOf="@id/currentNickname"/>
 
-        <Button
-            android:id="@+id/checkNickname"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
-            android:text="중복 확인"
-            app:layout_constraintStart_toEndOf="@id/changeNickname"
-            app:layout_constraintTop_toTopOf="@id/changeNickname"
-            app:layout_constraintBottom_toBottomOf="@id/changeNickname"/>
-
         <TextView
             android:id="@+id/textCurrentIntro"
             android:layout_width="wrap_content"
