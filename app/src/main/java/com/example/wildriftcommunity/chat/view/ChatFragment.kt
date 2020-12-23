@@ -37,7 +37,7 @@ class ChatFragment : Fragment(), ProgressListener, KodeinAware {
         binding.lifecycleOwner = activity
         binding.chatViewModel = chatViewModel
         chatViewModel.progressListener = this
-        
+
         val bundle = arguments
         var destinationUid: String? = null
         if (bundle != null){
@@ -56,10 +56,7 @@ class ChatFragment : Fragment(), ProgressListener, KodeinAware {
                 startActivity(Intent(activity, ChatInfoActivity::class.java).apply { putExtra("roomID", chatViewModel.getChatRoomId()) })
             }
             if(it == false) {
-                println("csh 6")
                 chatViewModel.createChatRoom(destinationUid!!)
-                println("csh 7")
-                println("csh : " + chatViewModel.getChatRoomId())
             }
         })
 

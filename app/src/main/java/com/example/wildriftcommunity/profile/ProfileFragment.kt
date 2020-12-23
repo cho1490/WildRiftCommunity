@@ -51,7 +51,8 @@ class ProfileFragment : Fragment(), KodeinAware, ProgressListener {
 
         profileViewModel.userDetails.observe(viewLifecycleOwner, Observer {
             binding.apply {
-                Glide.with(activity!!).load(it.photoUri).into(profileImage)
+                if(it.photoUri != "")
+                    Glide.with(activity!!).load(it.photoUri).into(profileImage)
                 nickname.text = it.nickname
                 introduce.text = it.introduce
                 postCount.text = it.postCount.toString()

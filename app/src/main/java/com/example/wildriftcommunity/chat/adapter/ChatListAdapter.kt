@@ -62,7 +62,8 @@ class ChatListAdapter(): RecyclerView.Adapter<ChatListAdapter.ViewHolder>(){
         var user: User? = null
         FirebaseFirestore.getInstance().collection("users").document(destinationUid!!).get().addOnCompleteListener {
             user = it.result!!.toObject(User::class.java)!!
-            Glide.with(holder.itemView.iv_chatListItemProfileImage.context)
+            if(user!!.photoUri != "")
+                Glide.with(holder.itemView.iv_chatListItemProfileImage.context)
                 .load(user!!.photoUri)
                 .apply(RequestOptions.circleCropTransform())
                 .into(holder.itemView.iv_chatListItemProfileImage)

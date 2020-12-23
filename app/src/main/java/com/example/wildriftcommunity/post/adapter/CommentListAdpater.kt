@@ -57,7 +57,9 @@ class CommentListAdapter(postId: String, private val pia: PostInfoActivity): Rec
                 holder.itemView.apply {
                     if (pia.isFinishing)
                         return@addOnCompleteListener
-                    Glide.with(pia).load(user!!.photoUri)
+
+                    if(user!!.photoUri != "")
+                        Glide.with(pia).load(user!!.photoUri)
                         .apply(RequestOptions.circleCropTransform())
                         .into(commentListItemProfileImage)
                     commentListItemNickname.text = user!!.nickname
