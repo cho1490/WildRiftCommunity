@@ -2,6 +2,7 @@ package com.example.wildriftcommunity.util
 
 import android.annotation.SuppressLint
 import android.net.Uri
+import com.example.wildriftcommunity.data.models.Alarm
 import com.example.wildriftcommunity.data.models.Chat
 import com.example.wildriftcommunity.data.models.Post
 import com.example.wildriftcommunity.data.models.User
@@ -196,16 +197,16 @@ class FirebaseSource {
     fun setPostInfoInPost(postId: String) =
         Completable.create { emitter ->
             val postRef = db.collection("posts")
-                postRef.document(postId).get()
-                    .addOnCompleteListener{
-                        if(!emitter.isDisposed){
-                            if(it.isSuccessful){
-                                postInfoInPost = it.result?.toObject(Post::class.java)
-                                emitter.onComplete()
-                            } else
-                                emitter.onError(it.exception!!)
-                        }
+            postRef.document(postId).get()
+                .addOnCompleteListener{
+                    if(!emitter.isDisposed){
+                        if(it.isSuccessful){
+                            postInfoInPost = it.result?.toObject(Post::class.java)
+                            emitter.onComplete()
+                        } else
+                            emitter.onError(it.exception!!)
                     }
+                }
         }
 
     fun setUserInfoInPost(userUid: String) =
@@ -277,7 +278,7 @@ class FirebaseSource {
                         println("csh : $destinationUid")
                         chatRoomId = null
                         emitter.onComplete()
-                }
+                    }
                     .addOnFailureListener {
                         emitter.onError(it)
                     }
@@ -296,6 +297,16 @@ class FirebaseSource {
                 .addOnFailureListener {
                     emitter.onError(it)
                 }
+        }
+
+    fun alarm(destinationUid: String, kind: Int) =
+        Completable.create {
+            val alarm = Alarm()
+            alarm.destinationUid = destinationUid
+            alarm.Uid = currentUser()!!.uid
+            alarm.kind = kind
+            alarm.timestamp = System.currentTimeMillis()
+            db.collection("alarms").document().set(alarm)
         }
 
 }

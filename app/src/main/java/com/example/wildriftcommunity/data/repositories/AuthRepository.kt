@@ -12,4 +12,6 @@ class AuthRepository(private val firebase: FirebaseSource) {
 
     fun createUser(email: String) = firebase.createUser(email)
 
+    fun alarm(destinationUid: String, kind: Int) = firebase.alarm(destinationUid, kind)
+
 }

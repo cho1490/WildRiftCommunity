@@ -3,9 +3,9 @@ package com.example.wildriftcommunity.data.models
 import com.google.api.Billing
 
 data class Alarm(
-    val destinationUid: String? = null,
-    val Uid: String? = null,
-    val kind: Int? = null,
-    val message: String? = null,
-    val timestamp: Long? = null
+    var destinationUid: String? = null,
+    var Uid: String? = null,
+    var kind: Int? = null,
+    var message: String? = null,
+    var timestamp: Long? = null
 )

@@ -12,4 +12,6 @@ class ChatRepository(private val firebase: FirebaseSource){
 
     fun sendMessage(chatRoomID: String, message: String) = firebase.sendMessage(chatRoomID, message)
 
+    fun alarm(destinationUid: String, kind: Int) = firebase.alarm(destinationUid, kind)
+
 }

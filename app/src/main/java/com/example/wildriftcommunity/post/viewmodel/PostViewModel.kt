@@ -129,6 +129,18 @@ class PostViewModel(private val postRepository: PostRepository) : ViewModel() {
         disposables.add(disposable)
     }
 
+    fun alarm(destinationUid: String, kind: Int) {
+        val disposable = postRepository.alarm(destinationUid, kind)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe({
+                progressListener?.onSuccess("")
+            }, {
+                progressListener?.onFailure("")
+            })
+        disposables.add(disposable)
+    }
+
     override fun onCleared() {
         super.onCleared()
         disposables.dispose()

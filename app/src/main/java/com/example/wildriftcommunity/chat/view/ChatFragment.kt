@@ -46,7 +46,7 @@ class ChatFragment : Fragment(), ProgressListener, KodeinAware {
         }else{
             binding.chatListRecyclerView.apply {
                 layoutManager = LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
-                setHasFixedSize(true)
+                setHasFixedSize(false)
                 adapter = ChatListAdapter()
             }
         }
@@ -56,7 +56,8 @@ class ChatFragment : Fragment(), ProgressListener, KodeinAware {
                 startActivity(Intent(activity, ChatInfoActivity::class.java).apply { putExtra("roomID", chatViewModel.getChatRoomId()) })
             }
             if(it == false) {
-                chatViewModel.createChatRoom(destinationUid!!)
+                chatViewModel.alarm(destinationUid!!, 1)
+                chatViewModel.createChatRoom(destinationUid)
             }
         })
 

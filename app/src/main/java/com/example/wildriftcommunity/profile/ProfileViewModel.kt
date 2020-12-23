@@ -106,4 +106,16 @@ class ProfileViewModel(private val profileRepository: ProfileRepository) : ViewM
         disposables.dispose()
     }
 
+    fun alarm(destinationUid: String, kind: Int){
+        val disposable = profileRepository.alarm(destinationUid, kind)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe({
+                progressListener?.onSuccess("")
+            },{
+                progressListener?.onFailure("")
+            })
+        disposables.add(disposable)
+    }
+
 }

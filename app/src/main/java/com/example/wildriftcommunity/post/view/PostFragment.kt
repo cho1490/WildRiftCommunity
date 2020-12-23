@@ -13,7 +13,6 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.wildriftcommunity.ProgressListener
 import com.example.wildriftcommunity.R
-import com.example.wildriftcommunity.data.models.Post
 import com.example.wildriftcommunity.post.adapter.PostListAdapter
 import com.example.wildriftcommunity.post.viewmodel.PostViewModel
 import com.example.wildriftcommunity.post.viewmodel.PostViewModelFactory

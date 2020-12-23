@@ -21,4 +21,6 @@ class PostRepository(private val firebase: FirebaseSource){
 
     fun sendComment(postId: String, messageBody: String) = firebase.sendComment(postId, messageBody)
 
+    fun alarm(destinationUid: String, kind: Int) = firebase.alarm(destinationUid, kind)
+
 }

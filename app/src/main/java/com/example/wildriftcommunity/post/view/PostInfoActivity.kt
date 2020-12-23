@@ -39,18 +39,20 @@ class PostInfoActivity : AppCompatActivity(), ProgressListener, KodeinAware {
         val postId = intent.getStringExtra("postId")!!
         val userUid = intent.getStringExtra("userUid")!!
 
+        var post: Post? = null
+
         postViewModel.setDataInfoInPost(postId, userUid)
 
         postViewModel.startPostInfo.observe(this, Observer {
             if (it == true){
                 binding.apply {
-                    val post: Post = postViewModel.getPostInfoInPost()!!
+                    post = postViewModel.getPostInfoInPost()!!
                     val user: User = postViewModel.getUserInfoInPost()!!
                     Glide.with(this@PostInfoActivity).load(user.photoUri).into(profileImage)
                     nickname.text = user.nickname
-                    title.text = post.title
-                    body.text = post.body
-                    Glide.with(this@PostInfoActivity).load(post.imageUrl).into(bodyImage)
+                    title.text = post!!.title
+                    body.text = post!!.body
+                    Glide.with(this@PostInfoActivity).load(post!!.imageUrl).into(bodyImage)
                 }
             }
         })
@@ -62,6 +64,7 @@ class PostInfoActivity : AppCompatActivity(), ProgressListener, KodeinAware {
         }
 
         binding.sendComment.setOnClickListener {
+            postViewModel.alarm(post!!.userUid!!, 0)
             postViewModel.sendMessage(postId, binding.sendMessageBody.text.toString())
             binding.sendMessageBody.setText("")
         }

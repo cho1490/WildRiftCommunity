@@ -67,4 +67,16 @@ class ChatViewModel(private val chatRepository: ChatRepository) : ViewModel() {
             })
     }
 
+    fun alarm(destinationUid: String, kind: Int){
+        val disposable = chatRepository.alarm(destinationUid, kind)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe({
+                progressListener?.onSuccess("")
+            },{
+                progressListener?.onFailure("")
+            })
+        disposables.add(disposable)
+    }
+
 }
