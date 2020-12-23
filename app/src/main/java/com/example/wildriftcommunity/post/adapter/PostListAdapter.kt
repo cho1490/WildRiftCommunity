@@ -54,7 +54,7 @@ class PostListAdapter(private val idList: List<String>, private val pf: PostFrag
                             putExtra("postId", idList[position])
                             putExtra("userUid", post!!.userUid)
                         }
-                        pf.startActivityForResult(intent, 500)
+                        pf.activity!!.startActivityForResult(intent, 500)
                     }
                 }
             }

@@ -67,7 +67,6 @@ class ProfileFragment : Fragment(), KodeinAware, ProgressListener {
 
     override fun onStart() {
         super.onStart()
-        println("csh $destinationUid")
         if (destinationUid == null)
             profileViewModel.fetchUserDetails(null)
         else {

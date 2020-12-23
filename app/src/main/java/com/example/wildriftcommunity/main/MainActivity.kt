@@ -55,7 +55,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (/*requestCode == 500 &&*/ resultCode == RESULT_OK) {
+        if (requestCode == 500 && resultCode == RESULT_OK) {
             supportFragmentManager.beginTransaction().apply {
                 val destinationUid = data!!.getStringExtra("destinationUid")
                 val bundle = Bundle()
