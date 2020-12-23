@@ -11,6 +11,7 @@ import com.example.wildriftcommunity.R
 import com.example.wildriftcommunity.chat.view.ChatInfoActivity
 import com.example.wildriftcommunity.data.models.Chat
 import com.example.wildriftcommunity.data.models.User
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
@@ -23,7 +24,7 @@ import kotlin.collections.ArrayList
 class ChatListAdapter(): RecyclerView.Adapter<ChatListAdapter.ViewHolder>(){
 
     private val list: ArrayList<Chat> = arrayListOf()
-    private val myUid: String = com.google.firebase.auth.FirebaseAuth.getInstance().currentUser!!.uid
+    private val myUid: String? = FirebaseAuth.getInstance().uid
 
     init {
         val chatListListener = object : ValueEventListener {
@@ -39,7 +40,7 @@ class ChatListAdapter(): RecyclerView.Adapter<ChatListAdapter.ViewHolder>(){
             }
         }
 
-        FirebaseDatabase.getInstance().reference.child("chatRooms").orderByChild("users/$myUid").addListenerForSingleValueEvent(chatListListener)
+        FirebaseDatabase.getInstance().reference.child("chatRooms").orderByChild("users/$myUid").equalTo(true).addListenerForSingleValueEvent(chatListListener)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {

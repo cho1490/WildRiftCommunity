@@ -8,7 +8,6 @@ import com.example.wildriftcommunity.data.models.User
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.Query
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import io.reactivex.Completable
@@ -245,6 +244,11 @@ class FirebaseSource {
             val chatRoomIDListener = object : ValueEventListener {
                 override fun onDataChange(dataSnapshot: DataSnapshot) {
                     var chat: Chat?
+                    if(!dataSnapshot.hasChildren()){
+                        chatRoomId = null
+                        emitter.onComplete()
+                    }
+
                     for (item in dataSnapshot.children){
                         chat = item.getValue(Chat::class.java)
                         if(chat!!.users.contains(destinationUid)){
@@ -270,6 +274,7 @@ class FirebaseSource {
                 chat.users[destinationUid] = true
                 realtimeDb.child("chatRooms").push().setValue(chat)
                     .addOnSuccessListener {
+                        println("csh : $destinationUid")
                         chatRoomId = null
                         emitter.onComplete()
                 }

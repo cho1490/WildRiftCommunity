@@ -34,6 +34,9 @@ fun timeConverter(time:  String): String {
         sec > 0 -> {
             return sec.toString() + "초 전"
         }
+        sec > -1 -> {
+            return "방금 전"
+        }
         else -> {
             return "오래 전"
         }

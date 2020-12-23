@@ -1,6 +1,5 @@
 package com.example.wildriftcommunity.profile
 
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -9,15 +8,19 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.example.wildriftcommunity.ProgressListener
 import com.example.wildriftcommunity.R
+import com.example.wildriftcommunity.chat.view.ChatFragment
 import com.example.wildriftcommunity.databinding.ProfileFragmentBinding
 import org.kodein.di.KodeinAware
 import org.kodein.di.android.x.kodein
 import org.kodein.di.generic.instance
+
 
 class ProfileFragment : Fragment(), KodeinAware, ProgressListener {
 
@@ -61,6 +64,22 @@ class ProfileFragment : Fragment(), KodeinAware, ProgressListener {
             if(it == true)
                 startActivity(Intent(activity, ProfileEditActivity::class.java))
         })
+
+        binding.goChat.setOnClickListener {
+            val fragment: Fragment = ChatFragment()
+            val fragmentManager: FragmentManager = activity!!.supportFragmentManager
+            val fragmentTransaction: FragmentTransaction = fragmentManager.beginTransaction()
+            val args = Bundle()
+            args.putString("destinationUid", destinationUid)
+            fragment.arguments = args
+            fragmentTransaction.replace(R.id.frameLayout, fragment)
+            fragmentTransaction.addToBackStack(null)
+            fragmentTransaction.commit()
+        }
+
+        binding.thumbsUp.setOnClickListener {
+
+        }
 
         return binding.root
     }

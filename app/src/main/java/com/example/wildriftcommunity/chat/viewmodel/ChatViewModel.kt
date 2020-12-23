@@ -26,13 +26,13 @@ class ChatViewModel(private val chatRepository: ChatRepository) : ViewModel() {
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({
-                if(getChatRoomId() == null){
-                    _startChatInfo.value = false
-                    progressListener?.onSuccess("")
-                    //새로운 채팅방 생성
-                }else{
+                if(getChatRoomId() != null){
                     _startChatInfo.value = true
                     progressListener?.onSuccess("채팅방 입장")
+                }else{
+                    println("csh : null나옴")
+                    _startChatInfo.value = false
+                    progressListener?.onSuccess("")
                 }
             },{
                 progressListener?.onFailure("방 찾기 에러")

@@ -17,7 +17,6 @@ import com.example.wildriftcommunity.chat.adapter.ChatListAdapter
 import com.example.wildriftcommunity.chat.viewmodel.ChatViewModel
 import com.example.wildriftcommunity.chat.viewmodel.ChatViewModelFactory
 import com.example.wildriftcommunity.databinding.ChatFragmentBinding
-import kotlinx.android.synthetic.main.chat_fragment.*
 import org.kodein.di.KodeinAware
 import org.kodein.di.generic.instance
 import org.kodein.di.android.x.kodein
@@ -38,18 +37,29 @@ class ChatFragment : Fragment(), ProgressListener, KodeinAware {
         binding.lifecycleOwner = activity
         binding.chatViewModel = chatViewModel
         chatViewModel.progressListener = this
-
-        binding.chatListRecyclerView.apply {
-            layoutManager = LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
-            setHasFixedSize(true)
-            adapter = ChatListAdapter()
+        
+        val bundle = arguments
+        var destinationUid: String? = null
+        if (bundle != null){
+            destinationUid = bundle.getString("destinationUid", "")
+            chatViewModel.findRoomId(destinationUid)
+        }else{
+            binding.chatListRecyclerView.apply {
+                layoutManager = LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
+                setHasFixedSize(true)
+                adapter = ChatListAdapter()
+            }
         }
 
         chatViewModel.startChatInfo.observe(viewLifecycleOwner, Observer {
-            if(it){
+            if(it == true) {
                 startActivity(Intent(activity, ChatInfoActivity::class.java).apply { putExtra("roomID", chatViewModel.getChatRoomId()) })
-            }else{
-                chatViewModel.createChatRoom("mcxncSzaKoOgYq2Rfc9JEVHqCSI3")
+            }
+            if(it == false) {
+                println("csh 6")
+                chatViewModel.createChatRoom(destinationUid!!)
+                println("csh 7")
+                println("csh : " + chatViewModel.getChatRoomId())
             }
         })
 
@@ -57,16 +67,16 @@ class ChatFragment : Fragment(), ProgressListener, KodeinAware {
     }
 
     override fun onStarted() {
-        progressbarChat.visibility = View.VISIBLE
+        binding.progressbarChat.visibility = View.VISIBLE
     }
 
     override fun onSuccess(message: String) {
-        progressbarChat.visibility = View.GONE
+        binding.progressbarChat.visibility = View.GONE
         Toast.makeText(activity, message, Toast.LENGTH_SHORT).show()
     }
 
     override fun onFailure(message: String) {
-        progressbarChat.visibility = View.GONE
+        binding.progressbarChat.visibility = View.GONE
         Toast.makeText(activity, message, Toast.LENGTH_SHORT).show()
     }
 

@@ -36,7 +36,7 @@ class ChatInfoActivity : AppCompatActivity(), ProgressListener, KodeinAware {
         binding.chatViewModel = chatViewModel
         binding.lifecycleOwner = this
 
-        var roomID = intent.getStringExtra("roomID")
+        val roomID = intent.getStringExtra("roomID")
 
         binding.sendMessage.setOnClickListener {
             chatViewModel.sendMessage(roomID!!, binding.sendMessageBody.text.toString())

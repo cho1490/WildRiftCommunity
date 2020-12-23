@@ -32,14 +32,7 @@ class MainActivity : AppCompatActivity() {
                 R.id.menu_create -> startActivity(Intent(this, CreatePostActivity::class.java))
                 R.id.menu_chat -> makeCurrentFragment(chatFragment)
                 R.id.menu_notice -> makeCurrentFragment(noticeFragment)
-                R.id.menu_profile -> {
-                    supportFragmentManager.beginTransaction().apply {
-                        val bundle: Bundle? = null
-                        profileFragment.arguments = bundle
-                        replace(R.id.frameLayout, profileFragment)
-                        commit()
-                    }
-                }
+                R.id.menu_profile -> makeCurrentFragment(profileFragment)
             }
             true
         }
@@ -48,6 +41,8 @@ class MainActivity : AppCompatActivity() {
 
     private fun makeCurrentFragment(fragment : Fragment) {
         supportFragmentManager.beginTransaction().apply {
+            val bundle: Bundle? = null
+            fragment.arguments = bundle
             replace(R.id.frameLayout, fragment)
             commit()
         }
