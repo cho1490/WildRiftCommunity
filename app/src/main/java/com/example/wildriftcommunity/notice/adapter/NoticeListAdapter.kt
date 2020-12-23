@@ -11,6 +11,7 @@ import com.example.wildriftcommunity.R
 import com.example.wildriftcommunity.data.models.Alarm
 import com.example.wildriftcommunity.data.models.User
 import com.example.wildriftcommunity.notice.view.NoticeFragment
+import com.example.wildriftcommunity.util.timeConverter
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.notice_list_item.view.*
 
@@ -65,6 +66,7 @@ class NoticeListAdapter(uid: String, private val nf: NoticeFragment): RecyclerVi
                     .apply(RequestOptions.circleCropTransform())
                     .into(holder.itemView.image)
             holder.itemView.message.text = user!!.nickname + " " + kindMessage
+            holder.itemView.time.text = timeConverter(list[position].timestamp.toString())
         }
 
     }

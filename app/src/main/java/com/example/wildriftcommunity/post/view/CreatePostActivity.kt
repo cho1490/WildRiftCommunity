@@ -60,6 +60,12 @@ class CreatePostActivity : AppCompatActivity(), ProgressListener, KodeinAware {
             }
         })
 
+        postViewModel.finish.observe(this, Observer {
+            if (it == true){
+                finish()
+            }
+        })
+
         val items = resources.getStringArray(R.array.post_type_array)
         val spinnerAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, items)
         binding.postTypeSpinner.adapter = spinnerAdapter

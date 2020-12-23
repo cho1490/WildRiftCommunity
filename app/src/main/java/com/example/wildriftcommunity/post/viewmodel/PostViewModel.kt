@@ -47,6 +47,10 @@ class PostViewModel(private val postRepository: PostRepository) : ViewModel() {
     val startPostInfo: LiveData<Boolean>
         get() = _startPostInfo
 
+    private var _finish = MutableLiveData<Boolean>()
+    val finish: LiveData<Boolean>
+        get() = _finish
+
     fun createPost() {
         _startCreatePost.value = true
         _startCreatePost.value = false
@@ -57,6 +61,7 @@ class PostViewModel(private val postRepository: PostRepository) : ViewModel() {
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({
                 progressListener?.onSuccess("글 작성 완료!")
+                _finish.value = true
             }, {
                 progressListener?.onFailure(it.message!!)
             })

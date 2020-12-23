@@ -25,6 +25,7 @@ class ChatInfoActivity : AppCompatActivity(), ProgressListener, KodeinAware {
     private val factory: ChatViewModelFactory by instance()
     private lateinit var chatViewModel: ChatViewModel
     private lateinit var binding : ActivityChatInfoBinding
+    private var roomID : String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,18 +37,13 @@ class ChatInfoActivity : AppCompatActivity(), ProgressListener, KodeinAware {
         binding.chatViewModel = chatViewModel
         binding.lifecycleOwner = this
 
-        val roomID = intent.getStringExtra("roomID")
+        roomID = intent.getStringExtra("roomID")
 
         binding.sendMessage.setOnClickListener {
             chatViewModel.sendMessage(roomID!!, binding.sendMessageBody.text.toString())
             binding.sendMessageBody.setText("")
         }
 
-        binding.messageRecyclerView.apply {
-            layoutManager = LinearLayoutManager(this@ChatInfoActivity, LinearLayoutManager.VERTICAL, false)
-            setHasFixedSize(true)
-            adapter = MessageListAdapter(roomID!!, messageRecyclerView)
-        }
 
 
        // chatViewModel.getMessage().observe(this, Observer {
@@ -63,6 +59,11 @@ class ChatInfoActivity : AppCompatActivity(), ProgressListener, KodeinAware {
 
     override fun onStart() {
         super.onStart()
+        binding.messageRecyclerView.apply {
+            layoutManager = LinearLayoutManager(this@ChatInfoActivity, LinearLayoutManager.VERTICAL, false)
+            setHasFixedSize(true)
+            adapter = MessageListAdapter(roomID!!, messageRecyclerView)
+        }
     }
 
     override fun onStarted() {

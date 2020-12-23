@@ -57,7 +57,7 @@ class ChatFragment : Fragment(), ProgressListener, KodeinAware {
             }
             if(it == false) {
                 chatViewModel.alarm(destinationUid!!, 1)
-                chatViewModel.createChatRoom(destinationUid)
+                chatViewModel.createChatRoom(destinationUid!!)
             }
         })
 
