@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.bumptech.glide.Glide
 import com.example.wildriftcommunity.R
 import com.example.wildriftcommunity.notice.adapter.NoticeListAdapter
 import com.example.wildriftcommunity.notice.viewmodel.NoticeViewModel
@@ -33,7 +34,8 @@ class NoticeFragment : Fragment(), KodeinAware {
         view.noticeRecyclerView.apply{
             layoutManager = LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
             setHasFixedSize(false)
-            adapter = NoticeListAdapter(noticeViewModel.getCurrentUserUid(), this@NoticeFragment)
+            val glideRequestManager = Glide.with(this@NoticeFragment)
+            adapter = NoticeListAdapter(noticeViewModel.getCurrentUserUid(), this@NoticeFragment, glideRequestManager)
         }
 
         return view

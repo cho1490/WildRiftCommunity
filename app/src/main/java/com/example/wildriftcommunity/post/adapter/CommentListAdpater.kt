@@ -6,7 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
+import com.bumptech.glide.RequestManager
 import com.bumptech.glide.request.RequestOptions
 import com.example.wildriftcommunity.R
 import com.example.wildriftcommunity.data.models.Post
@@ -19,7 +19,7 @@ import com.google.firebase.firestore.Query
 import kotlinx.android.synthetic.main.comment_list_item.view.*
 
 
-class CommentListAdapter(postId: String, private val pia: PostInfoActivity): RecyclerView.Adapter<CommentListAdapter.ViewHolder>(){
+class CommentListAdapter(postId: String, private val pia: PostInfoActivity, private val glideRequestManager: RequestManager): RecyclerView.Adapter<CommentListAdapter.ViewHolder>(){
 
     private val list: ArrayList<Post.Comment> = arrayListOf()
     private val fireStore = FirebaseFirestore.getInstance()
@@ -55,11 +55,8 @@ class CommentListAdapter(postId: String, private val pia: PostInfoActivity): Rec
                 user = it.result!!.toObject(User::class.java)
                 val userID = it.result!!.id
                 holder.itemView.apply {
-                    if (pia.isFinishing)
-                        return@addOnCompleteListener
-
                     if(user!!.photoUri != "")
-                        Glide.with(pia).load(user!!.photoUri)
+                        glideRequestManager.load(user!!.photoUri)
                         .apply(RequestOptions.circleCropTransform())
                         .into(commentListItemProfileImage)
                     commentListItemNickname.text = user!!.nickname

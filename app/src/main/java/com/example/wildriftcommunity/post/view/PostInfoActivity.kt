@@ -60,7 +60,8 @@ class PostInfoActivity : AppCompatActivity(), ProgressListener, KodeinAware {
         binding.commentRecyclerView.apply{
             layoutManager = LinearLayoutManager( this@PostInfoActivity, LinearLayoutManager.VERTICAL, false)
             setHasFixedSize(false)
-            adapter = CommentListAdapter(postId, this@PostInfoActivity)
+            val glideRequestManager = Glide.with(this@PostInfoActivity)
+            adapter = CommentListAdapter(postId, this@PostInfoActivity, glideRequestManager)
         }
 
         binding.sendComment.setOnClickListener {

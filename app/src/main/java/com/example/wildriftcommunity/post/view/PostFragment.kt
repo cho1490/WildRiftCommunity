@@ -11,6 +11,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.bumptech.glide.Glide
 import com.example.wildriftcommunity.ProgressListener
 import com.example.wildriftcommunity.R
 import com.example.wildriftcommunity.post.adapter.PostListAdapter
@@ -46,7 +47,8 @@ class PostFragment : Fragment(), ProgressListener, KodeinAware {
                 rv_postFragmentPostList.apply {
                     layoutManager = LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
                     setHasFixedSize(true)
-                    adapter = PostListAdapter(postIdList, this@PostFragment)
+                    val glideRequestManager = Glide.with(this@PostFragment)
+                    adapter = PostListAdapter(postIdList, this@PostFragment, glideRequestManager)
                 }
             }
 

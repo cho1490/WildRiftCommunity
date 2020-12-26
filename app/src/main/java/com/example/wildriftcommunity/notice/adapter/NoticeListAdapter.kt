@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.RequestManager
 import com.bumptech.glide.request.RequestOptions
 import com.example.wildriftcommunity.R
 import com.example.wildriftcommunity.data.models.Alarm
@@ -16,7 +17,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.notice_list_item.view.*
 
 
-class NoticeListAdapter(uid: String, private val nf: NoticeFragment): RecyclerView.Adapter<NoticeListAdapter.ViewHolder>() {
+class NoticeListAdapter(uid: String, private val nf: NoticeFragment, private val glideRequestManager: RequestManager): RecyclerView.Adapter<NoticeListAdapter.ViewHolder>() {
 
     private val list: ArrayList<Alarm> = arrayListOf()
     private val fireStore = FirebaseFirestore.getInstance()
@@ -45,9 +46,6 @@ class NoticeListAdapter(uid: String, private val nf: NoticeFragment): RecyclerVi
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         var user: User? = null
         fireStore.collection("users").document(list[position].Uid!!).get().addOnCompleteListener {
-            if (nf.isHidden)
-                return@addOnCompleteListener
-
             user = it.result!!.toObject(User::class.java)!!
 
             var kindMessage: String? = null
@@ -62,7 +60,7 @@ class NoticeListAdapter(uid: String, private val nf: NoticeFragment): RecyclerVi
             }
 
             if (user!!.photoUri != "")
-                Glide.with(nf).load(user!!.photoUri)
+                glideRequestManager.load(user!!.photoUri)
                     .apply(RequestOptions.circleCropTransform())
                     .into(holder.itemView.image)
             holder.itemView.message.text = user!!.nickname + " " + kindMessage
