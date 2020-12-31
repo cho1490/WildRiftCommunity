@@ -70,10 +70,16 @@ class ChatListAdapter(): RecyclerView.Adapter<ChatListAdapter.ViewHolder>(){
 
             holder.itemView.tv_chatListItemNickname.text = user!!.nickname
 
-            val commentMap: TreeMap<String, Chat.Comment> = TreeMap(Collections.reverseOrder())
-            commentMap.putAll(list[position].comments)
-            val lastIndexKey: String = commentMap.lastKey()
-            holder.itemView.tv_chatListItemChat.text = list[position].comments[lastIndexKey]!!.message
+
+            if (list[position].comments.isNotEmpty()) {
+                val commentMap: TreeMap<String, Chat.Comment> = TreeMap(Collections.reverseOrder())
+                commentMap.putAll(list[position].comments)
+                holder.itemView.tv_chatListItemChat.text =
+                    list[position].comments[commentMap.lastKey()]!!.message
+            }
+            else
+                holder.itemView.tv_chatListItemChat.text = ""
+
         }
 
         holder.itemView.setOnClickListener {
@@ -85,7 +91,7 @@ class ChatListAdapter(): RecyclerView.Adapter<ChatListAdapter.ViewHolder>(){
                         chat = item.getValue(Chat::class.java)
                         if(chat!!.users.contains(destinationUid)){
                             roomID = item.key
-                            val context=holder.itemView.context
+                            val context= holder.itemView.context
                             val intent = Intent(context, ChatInfoActivity::class.java).apply { putExtra("roomID", roomID) }
                             context.startActivity(intent)
                         }

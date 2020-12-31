@@ -44,6 +44,11 @@ class ChatInfoActivity : AppCompatActivity(), ProgressListener, KodeinAware {
             binding.sendMessageBody.setText("")
         }
 
+         binding.messageRecyclerView.apply {
+             layoutManager = LinearLayoutManager(this@ChatInfoActivity, LinearLayoutManager.VERTICAL, false)
+             setHasFixedSize(true)
+             adapter = MessageListAdapter(roomID!!, messageRecyclerView)
+         }
 
 
        // chatViewModel.getMessage().observe(this, Observer {
@@ -55,15 +60,6 @@ class ChatInfoActivity : AppCompatActivity(), ProgressListener, KodeinAware {
            // }
         //})
 
-    }
-
-    override fun onStart() {
-        super.onStart()
-        binding.messageRecyclerView.apply {
-            layoutManager = LinearLayoutManager(this@ChatInfoActivity, LinearLayoutManager.VERTICAL, false)
-            setHasFixedSize(true)
-            adapter = MessageListAdapter(roomID!!, messageRecyclerView)
-        }
     }
 
     override fun onStarted() {

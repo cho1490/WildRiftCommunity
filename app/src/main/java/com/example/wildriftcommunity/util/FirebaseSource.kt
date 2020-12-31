@@ -257,6 +257,9 @@ class FirebaseSource {
                             emitter.onComplete()
                         }
                     }
+
+                    if(chatRoomId == null)
+                        emitter.onComplete()
                 }
 
                 override fun onCancelled(databaseError: DatabaseError) {
@@ -269,20 +272,17 @@ class FirebaseSource {
 
     fun createChatRoom(destinationUid: String) =
         Completable.create { emitter ->
-            if (chatRoomId == null) {
-                val chat = Chat()
-                chat.users[currentUser()!!.uid] = true
-                chat.users[destinationUid] = true
-                realtimeDb.child("chatRooms").push().setValue(chat)
-                    .addOnSuccessListener {
-                        println("csh : $destinationUid")
-                        chatRoomId = null
-                        emitter.onComplete()
-                    }
-                    .addOnFailureListener {
-                        emitter.onError(it)
-                    }
-            }
+            val chat = Chat()
+            chat.users[currentUser()!!.uid] = true
+            chat.users[destinationUid] = true
+            realtimeDb.child("chatRooms").push().setValue(chat)
+                .addOnSuccessListener {
+                    chatRoomId = null
+                    emitter.onComplete()
+                }
+                .addOnFailureListener {
+                    emitter.onError(it)
+                }
         }
 
     fun sendMessage(chatRoomID: String, message: String) =

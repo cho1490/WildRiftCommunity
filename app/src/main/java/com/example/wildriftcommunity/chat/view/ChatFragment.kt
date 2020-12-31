@@ -52,12 +52,12 @@ class ChatFragment : Fragment(), ProgressListener, KodeinAware {
         }
 
         chatViewModel.startChatInfo.observe(viewLifecycleOwner, Observer {
-            if(it == true) {
+            if (it == true) {
                 startActivity(Intent(activity, ChatInfoActivity::class.java).apply { putExtra("roomID", chatViewModel.getChatRoomId()) })
             }
-            if(it == false) {
+            else {
                 chatViewModel.alarm(destinationUid!!, 1)
-                chatViewModel.createChatRoom(destinationUid!!)
+                chatViewModel.createChatRoom(destinationUid)
             }
         })
 

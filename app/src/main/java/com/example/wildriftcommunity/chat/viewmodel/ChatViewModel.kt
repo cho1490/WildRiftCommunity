@@ -30,7 +30,6 @@ class ChatViewModel(private val chatRepository: ChatRepository) : ViewModel() {
                     _startChatInfo.value = true
                     progressListener?.onSuccess("채팅방 입장")
                 }else{
-                    println("csh : null나옴")
                     _startChatInfo.value = false
                     progressListener?.onSuccess("")
                 }
