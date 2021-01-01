@@ -25,7 +25,6 @@ class ChatInfoActivity : AppCompatActivity(), ProgressListener, KodeinAware {
     private val factory: ChatViewModelFactory by instance()
     private lateinit var chatViewModel: ChatViewModel
     private lateinit var binding : ActivityChatInfoBinding
-    private var roomID : String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,7 +36,7 @@ class ChatInfoActivity : AppCompatActivity(), ProgressListener, KodeinAware {
         binding.chatViewModel = chatViewModel
         binding.lifecycleOwner = this
 
-        roomID = intent.getStringExtra("roomID")
+        val roomID = intent.getStringExtra("roomID")
 
         binding.sendMessage.setOnClickListener {
             chatViewModel.sendMessage(roomID!!, binding.sendMessageBody.text.toString())

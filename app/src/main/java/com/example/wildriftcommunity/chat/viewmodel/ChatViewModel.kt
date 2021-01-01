@@ -18,6 +18,10 @@ class ChatViewModel(private val chatRepository: ChatRepository) : ViewModel() {
     val startChatInfo: LiveData<Boolean>
         get() = _startChatInfo
 
+    private var _findRoom = MutableLiveData<Boolean>()
+    val findRoom: LiveData<Boolean>
+        get() = _findRoom
+
     fun getChatRoomId() = chatRepository.getChatRoomId()
 
     fun findRoomId(destinationUid: String) {
@@ -30,7 +34,7 @@ class ChatViewModel(private val chatRepository: ChatRepository) : ViewModel() {
                     _startChatInfo.value = true
                     progressListener?.onSuccess("채팅방 입장")
                 }else{
-                    _startChatInfo.value = false
+                    _findRoom.value = true
                     progressListener?.onSuccess("")
                 }
             },{
@@ -45,7 +49,6 @@ class ChatViewModel(private val chatRepository: ChatRepository) : ViewModel() {
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({
-                _startChatInfo.value = true
                 progressListener?.onSuccess("채팅방 생성")
             }, {
                 progressListener?.onFailure("채팅방 생성 에러")
