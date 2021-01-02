@@ -150,4 +150,5 @@ class PostViewModel(private val postRepository: PostRepository) : ViewModel() {
         super.onCleared()
         disposables.dispose()
     }
+
 }

@@ -101,11 +101,6 @@ class ProfileViewModel(private val profileRepository: ProfileRepository) : ViewM
         _startProfile.value = false
     }
 
-    override fun onCleared() {
-        super.onCleared()
-        disposables.dispose()
-    }
-
     fun alarm(destinationUid: String, kind: Int){
         val disposable = profileRepository.alarm(destinationUid, kind)
             .subscribeOn(Schedulers.io())
@@ -116,6 +111,11 @@ class ProfileViewModel(private val profileRepository: ProfileRepository) : ViewM
                 progressListener?.onFailure("")
             })
         disposables.add(disposable)
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        disposables.dispose()
     }
 
 }

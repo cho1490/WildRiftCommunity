@@ -81,4 +81,9 @@ class ChatViewModel(private val chatRepository: ChatRepository) : ViewModel() {
         disposables.add(disposable)
     }
 
+    override fun onCleared() {
+        super.onCleared()
+        disposables.dispose()
+    }
+
 }
