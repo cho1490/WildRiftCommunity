@@ -12,4 +12,6 @@ class ProfileRepository (private val firebase: FirebaseSource) {
     fun updateUserDetails(photoUri: Uri?, nickname: String, introduce: String) = firebase.updateUserDetails(photoUri, nickname, introduce)
 
     fun alarm(destinationUid: String, kind: Int) = firebase.alarm(destinationUid, kind)
+
+    fun thumbsUpClick(destinationUid: String) = firebase.thumbsUpClick(destinationUid)
 }

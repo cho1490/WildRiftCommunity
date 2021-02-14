@@ -8,6 +8,7 @@ import com.example.wildriftcommunity.data.models.Post
 import com.example.wildriftcommunity.data.models.User
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
+import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
@@ -307,6 +308,24 @@ class FirebaseSource {
             alarm.kind = kind
             alarm.timestamp = System.currentTimeMillis()
             db.collection("alarms").document().set(alarm)
+        }
+
+    fun thumbsUpClick(destinationUid: String) =
+        Completable.create{
+            var likeCount: Int
+
+            db.collection("users").document(destinationUid).apply {
+                get().addOnSuccessListener {
+                    likeCount = it["likeCount"].toString().toInt()
+
+                    val array: Array<String> = it["favorites"] as Array<String>
+                    if(!array.contains(currentUser()!!.uid)) {
+                        update("favorites", FieldValue.arrayUnion(currentUser()!!.uid))
+                        update("likeCount", likeCount + 1)
+                    }
+
+                }
+            }
         }
 
 }

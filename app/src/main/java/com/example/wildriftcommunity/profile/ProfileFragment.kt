@@ -17,6 +17,7 @@ import com.example.wildriftcommunity.ProgressListener
 import com.example.wildriftcommunity.R
 import com.example.wildriftcommunity.chat.view.ChatFragment
 import com.example.wildriftcommunity.databinding.ProfileFragmentBinding
+import kotlinx.android.synthetic.main.profile_fragment.*
 import org.kodein.di.KodeinAware
 import org.kodein.di.android.x.kodein
 import org.kodein.di.generic.instance
@@ -56,7 +57,7 @@ class ProfileFragment : Fragment(), KodeinAware, ProgressListener {
                 nickname.text = it.nickname
                 introduce.text = it.introduce
                 postCount.text = it.postCount.toString()
-                likeCount.text = it.lickCount.toString()
+                likeCount.text = it.likeCount.toString()
                 kindScore.text = it.kindScore.toString()
             }
         })
@@ -79,7 +80,7 @@ class ProfileFragment : Fragment(), KodeinAware, ProgressListener {
         }
 
         binding.thumbsUp.setOnClickListener {
-
+            profileViewModel.thumbsUpClick(destinationUid!!)
         }
 
         return binding.root

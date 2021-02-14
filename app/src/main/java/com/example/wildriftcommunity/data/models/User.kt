@@ -10,7 +10,7 @@ data class User(
     val introduce: String = "",
     val photoUri: String = "",
     val postCount: Int = 0,
-    val lickCount: Int = 0,
+    val likeCount: Int = 0,
     val kindScore: Int = 0,
-    var favorites: MutableMap<String, Boolean> = HashMap()
+    var favorites: List<String>? = null
 ): Parcelable

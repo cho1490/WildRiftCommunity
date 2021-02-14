@@ -113,6 +113,10 @@ class ProfileViewModel(private val profileRepository: ProfileRepository) : ViewM
         disposables.add(disposable)
     }
 
+    fun thumbsUpClick(destinationUid: String){
+
+    }
+
     override fun onCleared() {
         super.onCleared()
         disposables.dispose()
