@@ -64,7 +64,7 @@ class SignUpActivity : AppCompatActivity(), ProgressListener, KodeinAware {
 
         viewModel.startMain.observe(this, Observer {
             if (it == true) {
-                startActivity(Intent(this, MainActivity::class.java))
+                startActivity(Intent(this, SetUpActivity::class.java))
             }
         })
 
