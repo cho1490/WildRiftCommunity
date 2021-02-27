@@ -54,7 +54,7 @@ class CreatePostActivity : AppCompatActivity(), ProgressListener, KodeinAware {
 
         postViewModel.startPickImage.observe(this, Observer {
             if (it == true){
-                var photoPickerIntent = Intent(Intent.ACTION_PICK)
+                val photoPickerIntent = Intent(Intent.ACTION_PICK)
                 photoPickerIntent.type = "image/*"
                 startActivityForResult(photoPickerIntent, 0)
             }

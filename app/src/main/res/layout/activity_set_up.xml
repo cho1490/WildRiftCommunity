@@ -23,26 +23,25 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toTopOf="@id/profileImage"/>
+            app:layout_constraintBottom_toTopOf="@id/initProfileImage"/>
 
         <de.hdodenhof.circleimageview.CircleImageView
-            android:id="@+id/profileImage"
+            android:id="@+id/initProfileImage"
             android:layout_width="80dp"
             android:layout_height="80dp"
+            android:background="@drawable/ic_person_24"
             android:layout_marginTop="20dp"
-            android:background="#000000"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/textBoxTop"/>
 
-        <!--android:onClick="@{() -> profileViewModel.goToPickImage()}"-->
         <Button
             android:id="@+id/profileImageChange"
             android:layout_width="25dp"
             android:layout_height="25dp"
             android:onClick="@{() -> authViewModel.goToPickImage()}"
             android:background="@drawable/ic_baseline_photo_camera_24"
-            app:layout_constraintBottom_toBottomOf="@id/profileImage"
-            app:layout_constraintStart_toEndOf="@id/profileImage"/>
+            app:layout_constraintBottom_toBottomOf="@id/initProfileImage"
+            app:layout_constraintStart_toEndOf="@id/initProfileImage"/>
 
         <TextView
             android:id="@+id/textViewNickName"
@@ -50,7 +49,7 @@
             android:layout_height="wrap_content"
             android:text="닉네임"
             android:layout_marginTop="30dp"
-            app:layout_constraintTop_toBottomOf="@id/profileImage"
+            app:layout_constraintTop_toBottomOf="@id/initProfileImage"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintBottom_toTopOf="@id/editTextNickname"/>
 

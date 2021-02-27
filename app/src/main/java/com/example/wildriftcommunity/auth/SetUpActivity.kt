@@ -5,6 +5,7 @@ import android.content.Intent
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
@@ -50,7 +51,7 @@ class SetUpActivity : AppCompatActivity(), ProgressListener, KodeinAware {
 
         viewModel.startPickImage.observe(this, Observer {
             if (it == true) {
-                var photoPickerIntent = Intent(Intent.ACTION_PICK)
+                val photoPickerIntent = Intent(Intent.ACTION_PICK)
                 photoPickerIntent.type = "image/*"
                 startActivityForResult(photoPickerIntent, 0)
             }
@@ -69,10 +70,11 @@ class SetUpActivity : AppCompatActivity(), ProgressListener, KodeinAware {
         if (requestCode == 0){
             if(resultCode == Activity.RESULT_OK ){
                 photoUri = data?.data
-                binding.profileImage.setImageURI(photoUri)
+                binding.initProfileImage.setImageURI(photoUri)
             } else
                 finish()
         }
+
     }
 
     override fun onStarted() {

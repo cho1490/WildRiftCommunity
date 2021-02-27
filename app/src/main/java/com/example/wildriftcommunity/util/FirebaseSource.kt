@@ -2,6 +2,7 @@ package com.example.wildriftcommunity.util
 
 import android.annotation.SuppressLint
 import android.net.Uri
+import android.util.Log
 import com.example.wildriftcommunity.data.models.Alarm
 import com.example.wildriftcommunity.data.models.Chat
 import com.example.wildriftcommunity.data.models.Post
@@ -119,7 +120,10 @@ class FirebaseSource {
                 storageRef.putFile(photoUri).continueWithTask {
                     return@continueWithTask storageRef.downloadUrl
                 }.addOnSuccessListener { uri ->
-                    fieldUpdateMap["photoUri"] = uri
+                    userRef.document(currentUser()!!.uid).update("photoUri", uri.toString())
+                    //fieldUpdateMap["photoUri"] = uri
+                    //Log.d("csh", fieldUpdateMap["photoUri"].toString())
+                    // fieldUpdateMap["photoUri"] 의 값이 141번 줄에서 사라짐 이유 모르겠음...
                 }
             }
             if (nickname != ""){

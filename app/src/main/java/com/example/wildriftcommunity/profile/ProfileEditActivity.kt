@@ -5,6 +5,7 @@ import android.content.Intent
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
@@ -40,7 +41,7 @@ class ProfileEditActivity : AppCompatActivity(), ProgressListener, KodeinAware {
 
         viewModel.userDetails.observe(this, Observer {
             binding.apply {
-                Glide.with(this.root).load(it.photoUri).into(profileImage)
+                Glide.with(this.root).load(it.photoUri).into(changeProfileImage)
                 currentNickname.text = it.nickname
                 currentIntro.text = it.introduce
             }
@@ -77,7 +78,7 @@ class ProfileEditActivity : AppCompatActivity(), ProgressListener, KodeinAware {
         if (requestCode == 0){
             if(resultCode == Activity.RESULT_OK ){
                 photoUri = data?.data
-                binding.profileImage.setImageURI(photoUri)
+                binding.changeProfileImage.setImageURI(photoUri)
             } else
                 finish()
         }

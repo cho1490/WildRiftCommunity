@@ -2,6 +2,7 @@ package com.example.wildriftcommunity.auth
 
 import android.content.Intent
 import android.net.Uri
+import android.util.Log
 import android.view.View
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
