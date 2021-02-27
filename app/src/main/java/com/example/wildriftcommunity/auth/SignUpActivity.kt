@@ -14,7 +14,6 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.wildriftcommunity.ProgressListener
 import com.example.wildriftcommunity.R
 import com.example.wildriftcommunity.databinding.ActivitySignUpBinding
-import com.example.wildriftcommunity.main.MainActivity
 import kotlinx.android.synthetic.main.activity_sign_up.*
 import org.kodein.di.KodeinAware
 import org.kodein.di.android.kodein
@@ -62,7 +61,7 @@ class SignUpActivity : AppCompatActivity(), ProgressListener, KodeinAware {
             }
         })
 
-        viewModel.startMain.observe(this, Observer {
+        viewModel.startSetUp.observe(this, Observer {
             if (it == true) {
                 startActivity(Intent(this, SetUpActivity::class.java))
             }

@@ -22,23 +22,23 @@ class ProfileEditActivity : AppCompatActivity(), ProgressListener, KodeinAware {
 
     override val kodein by kodein()
     private val factory: ProfileViewModelFactory by instance()
-    private lateinit var profileViewModel: ProfileViewModel
+    private lateinit var viewModel: ProfileViewModel
     private lateinit var binding : ActivityProfileEditBinding
 
     var photoUri : Uri? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        profileViewModel = ViewModelProvider(this, factory).get(ProfileViewModel::class.java)
-        profileViewModel.progressListener = this
+        viewModel = ViewModelProvider(this, factory).get(ProfileViewModel::class.java)
+        viewModel.progressListener = this
 
         binding = DataBindingUtil.setContentView(this, R.layout.activity_profile_edit)
-        binding.profileViewModel = profileViewModel
+        binding.profileViewModel = viewModel
         binding.lifecycleOwner = this
 
-        profileViewModel.fetchUserDetails(null)
+        viewModel.fetchUserDetails(null)
 
-        profileViewModel.userDetails.observe(this, Observer {
+        viewModel.userDetails.observe(this, Observer {
             binding.apply {
                 Glide.with(this.root).load(it.photoUri).into(profileImage)
                 currentNickname.text = it.nickname
@@ -46,9 +46,9 @@ class ProfileEditActivity : AppCompatActivity(), ProgressListener, KodeinAware {
             }
         })
 
-        profileViewModel.startUpdate.observe(this, Observer {
+        viewModel.startUpdate.observe(this, Observer {
             if (it == true){
-                    profileViewModel.setUpdateUserDetails(
+                    viewModel.setUpdateUserDetails(
                         photoUri,
                         binding.changeNickname.text.toString(),
                         binding.changeIntro.text.toString()
@@ -56,7 +56,7 @@ class ProfileEditActivity : AppCompatActivity(), ProgressListener, KodeinAware {
             }
         })
 
-        profileViewModel.startPickImage.observe(this, Observer {
+        viewModel.startPickImage.observe(this, Observer {
             if (it == true) {
                 var photoPickerIntent = Intent(Intent.ACTION_PICK)
                 photoPickerIntent.type = "image/*"
@@ -64,7 +64,7 @@ class ProfileEditActivity : AppCompatActivity(), ProgressListener, KodeinAware {
             }
         })
 
-        profileViewModel.startProfile.observe(this, Observer {
+        viewModel.startProfile.observe(this, Observer {
             if (it == true){
                 finish()
             }

@@ -39,6 +39,7 @@
             android:id="@+id/profileImageChange"
             android:layout_width="25dp"
             android:layout_height="25dp"
+            android:onClick="@{() -> authViewModel.goToPickImage()}"
             android:background="@drawable/ic_baseline_photo_camera_24"
             app:layout_constraintBottom_toBottomOf="@id/profileImage"
             app:layout_constraintStart_toEndOf="@id/profileImage"/>
@@ -83,6 +84,7 @@
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:onClick="@{() -> authViewModel.updateUserDetails()}"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
