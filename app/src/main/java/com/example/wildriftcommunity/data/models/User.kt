@@ -12,5 +12,5 @@ data class User(
     var postCount: Int = 0,
     var likeCount: Int = 0,
     var kindScore: Int = 0,
-    var favorites: List<String>? = null
+    var favorites : MutableMap<String, Boolean> = HashMap()
 ): Parcelable

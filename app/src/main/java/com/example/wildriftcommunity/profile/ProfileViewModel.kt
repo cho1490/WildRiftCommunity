@@ -49,6 +49,8 @@ class ProfileViewModel(private val profileRepository: ProfileRepository) : ViewM
     val startUpdate: LiveData<Boolean>
         get() = _startUpdate
 
+    fun getCurrentUserUid() = profileRepository.getCurrentUserUid()
+
     fun fetchUserDetails(destinationUid: String?) {
         progressListener?.onStarted()
         val disposable = profileRepository.fetchUserDetails(destinationUid)

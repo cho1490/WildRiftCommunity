@@ -2,6 +2,7 @@ package com.example.wildriftcommunity.profile
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,8 +17,10 @@ import com.bumptech.glide.Glide
 import com.example.wildriftcommunity.ProgressListener
 import com.example.wildriftcommunity.R
 import com.example.wildriftcommunity.chat.view.ChatFragment
+import com.example.wildriftcommunity.data.models.User
 import com.example.wildriftcommunity.databinding.ProfileFragmentBinding
-import kotlinx.android.synthetic.main.profile_fragment.*
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 import org.kodein.di.KodeinAware
 import org.kodein.di.android.x.kodein
 import org.kodein.di.generic.instance
@@ -59,6 +62,13 @@ class ProfileFragment : Fragment(), KodeinAware, ProgressListener {
                 postCount.text = it.postCount.toString()
                 likeCount.text = it.likeCount.toString()
                 kindScore.text = it.kindScore.toString()
+                if(it.favorites.containsKey(profileViewModel!!.getCurrentUserUid()!!.uid)) {
+                    // like status
+                    thumbsUp.setBackgroundResource(R.drawable.ic_baseline_thumb_up_24)
+                }else{
+                    // unlike status
+                    thumbsUp.setBackgroundResource(R.drawable.ic_baseline_thumb_down_24 )
+                }
             }
         })
 
@@ -80,10 +90,34 @@ class ProfileFragment : Fragment(), KodeinAware, ProgressListener {
         }
 
         binding.thumbsUp.setOnClickListener {
-            profileViewModel.thumbsUpClick(destinationUid!!)
+            favoriteEvent()
+            //profileViewModel.thumbsUpClick(destinationUid!!)
         }
 
         return binding.root
+    }
+
+    private fun favoriteEvent() {
+        val fireStore = FirebaseFirestore.getInstance()
+        val tsDoc = fireStore.collection("users").document(destinationUid!!)
+        fireStore.runTransaction { transaction ->
+            val uid = profileViewModel.getCurrentUserUid()!!.uid
+            var userDTO = transaction.get(tsDoc).toObject(User::class.java)
+
+            if(userDTO!!.favorites.containsKey(uid)){
+                userDTO.likeCount = userDTO.likeCount - 1
+                userDTO.favorites.remove(uid)
+                binding.likeCount.text = userDTO.likeCount.toString()
+                binding.thumbsUp.setBackgroundResource(R.drawable.ic_baseline_thumb_down_24)
+            }else{
+                userDTO.likeCount = userDTO.likeCount + 1
+                userDTO.favorites[uid] = true
+                binding.likeCount.text = userDTO.likeCount.toString()
+                binding.thumbsUp.setBackgroundResource(R.drawable.ic_baseline_thumb_up_24)
+            }
+
+            transaction.set(tsDoc, userDTO)
+        }
     }
 
     override fun onStart() {
@@ -94,7 +128,6 @@ class ProfileFragment : Fragment(), KodeinAware, ProgressListener {
             profileViewModel.fetchUserDetails(destinationUid)
         }
     }
-
 
     override fun onStarted() {
         binding.progressbarProfile.visibility = View.VISIBLE
