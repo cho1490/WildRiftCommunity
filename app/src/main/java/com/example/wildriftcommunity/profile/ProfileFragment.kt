@@ -97,6 +97,7 @@ class ProfileFragment : Fragment(), KodeinAware, ProgressListener {
         return binding.root
     }
 
+    // 시간 나면 FirebaseSource 로 옮기기
     private fun favoriteEvent() {
         val fireStore = FirebaseFirestore.getInstance()
         val tsDoc = fireStore.collection("users").document(destinationUid!!)
